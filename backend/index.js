@@ -1,5 +1,11 @@
 require("dotenv").config();
-const mysql = require("mysql2");
-const connection = mysql.createConnection(process.env.DATABASE_URL);
-console.log("Connected to PlanetScale!");
-connection.end();
+const express = require("express");
+const app = express();
+const database = require("./database");
+// const conn = database.connectionStart();
+
+// database.connectionEnd(conn);
+
+app.listen(process.env.PORT, () => {
+  console.log("Conected successfully to ", process.env.PORT);
+});
