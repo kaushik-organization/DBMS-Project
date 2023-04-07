@@ -2,7 +2,7 @@
 
 Querys :-
 
-DDL :-
+DDL :-<br />
   Rutvik :-<br />
 // CREATE TABLE Author (author_id char(8) , PRIMARY KEY (author_id), name varchar(20) , about varchar(400) , gender varchar(10) ,country varchar(20))<br />
 // CREATE TABLE Publisher (publisher_id char(8) , PRIMARY KEY (publisher_id), name varchar(20) , contact_no int(10) , address varchar(200))<br />
