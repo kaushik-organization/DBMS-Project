@@ -1,3 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@500;600;700;800;900&family=Syne:wght@800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .gradient-black {
+        background: linear-gradient(180deg, transparent, #000);
+    }
+    .theme-font {
+        font-family: 'Exo 2', sans-serif;
+    }
+    .bg-shadow:hover {
+        box-shadow: 0 0px 30px #fc9ef3;
+    }
+
+    .back-shadow {
+        box-shadow: 0px 0px 50px #fc9ef3;
+    }
+    .input-group {
+        position: relative;
+    }
+    .input-field {
+        background-color: #000;
+        padding: 10px;
+        box-sizing: border-box;
+        outline: none;
+        border: 1px solid #5e5e5e;
+    }
+    .input-placeholder {
+        position: absolute;
+        top: 10px;
+        left: 8px;
+        font-size: 14px;
+        padding: 0px 5px;
+        color: #999;
+        transition: 0.3s;
+        pointer-events: none;
+    }
+    .input-field:focus + .input-placeholder, .input-field:not(:placeholder-shown) + .input-placeholder {
+        top: -10px;
+        color: #00b3ff;
+        background-color: #000;
+    }
+    .input-field:focus, .input-field:not(:placeholder-shown) {
+        border: 1px solid #00b3ff
+    }
+}
