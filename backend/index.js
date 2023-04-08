@@ -5,7 +5,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use("/api", require("./routes/main"));
+// app.use("/api", require("./routes/main"));
 
 const getAuthor = require("./routes/author/getAuthor");
 app.use("/", getAuthor);

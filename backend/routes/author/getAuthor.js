@@ -17,4 +17,8 @@ router.get("/get-author", async (req, res) => {
   }
 });
 
+router.use("/author" , require('./insertAuthor'));
+
+router.use("/author" , require('./deleteAuthor'));
+
 module.exports = router;
