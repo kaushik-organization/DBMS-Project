@@ -4,10 +4,8 @@ const express = require("express");
 const app = express();
 app.use(express.json());
 app.use(cors());
-// const database = require("./database");
-// const conn = database.connectionStart();
 
-// database.connectionEnd(conn);
+app.use("/api", require("./routes/main"));
 
 const getAuthor = require("./routes/author/getAuthor");
 app.use("/", getAuthor);
