@@ -45,4 +45,73 @@
     .input-field:focus, .input-field:not(:placeholder-shown) {
         border: 1px solid #00b3ff
     }
+
+    .input-field2 {
+        background-color: #222;
+        padding: 10px;
+        box-sizing: border-box;
+        outline: none;
+        border: 1px solid #303030;
+    }
+    .input-placeholder2 {
+        position: absolute;
+        top: 10px;
+        left: 8px;
+        font-size: 14px;
+        padding: 0px 5px;
+        color: #999;
+        transition: 0.3s;
+        pointer-events: none;
+    }
+    .input-field2:focus + .input-placeholder2, .input-field2:not(:placeholder-shown) + .input-placeholder2 {
+        top: -10px;
+        color: #fff;
+        background-color: #222;
+    }
+    .input-field2:focus, .input-field2:not(:placeholder-shown) {
+        border: 1px solid #fff
+    }
+
+    .input-field3 {
+        background-color: #222;
+        padding: 10px;
+        box-sizing: border-box;
+        outline: none;
+        border: 1px solid #303030;
+    }
+    .input-placeholder3 {
+        position: absolute;
+        top: 10px;
+        left: 8px;
+        font-size: 14px;
+        padding: 0px 5px;
+        color: #999;
+        transition: 0.3s;
+        pointer-events: none;
+    }
+    .input-field3:focus + .input-placeholder3, .input-field3:not(:placeholder-shown) + .input-placeholder3 {
+        top: -10px;
+        color: #999;
+        background-color: #222;
+    }
+    .input-field3:focus, .input-field3:not(:placeholder-shown) {
+        border: 1px solid #303030
+    }
+
+    .motion-animation {
+        animation: moveupdown 1s linear infinite;
+        animation-timing-function: ease;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+    }
+    @keyframes moveupdown {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+      
 }
