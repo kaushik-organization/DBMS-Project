@@ -1,8 +1,96 @@
+import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
+import Select from "react-select";
 
 export default function InsertBook({ setIsVisible }) {
   const handleClose = () => setIsVisible(false);
+  const [publisher, setPublisher] = useState([]);
+  const [selectedPublisher, setSelectedPublisher] = useState(null);
+  const [author, setAuthor] = useState([]);
+  const [selectedAuthor, setSelectedAuthor] = useState([]);
+  const [genre, setGenre] = useState([]);
+  const [selectedGenre, setSelectedGenre] = useState([]);
+
+  const getPublishers = async () => {
+    try {
+      const { data } = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/get-publisher`
+      );
+      const arr = data.data;
+      let arr1 = [];
+      for (let item of arr) {
+        arr1.push({ label: item.name, value: item.publisher_id });
+      }
+      setPublisher(() => [...arr1]);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getAuthor = async () => {
+    try {
+      const { data } = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/get-author`
+      );
+      const arr = data.data;
+      let arr1 = [];
+      for (let item of arr) {
+        arr1.push({ label: item.name, value: item.author_id });
+      }
+      setAuthor(() => [...arr1]);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getGenre = async () => {
+    try {
+      const { data } = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/get-genre`
+      );
+      const arr = data.data;
+      let arr1 = [];
+      for (let item of arr) {
+        arr1.push({ label: item.name, value: item.genre_id });
+      }
+      setGenre(() => [...arr1]);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getPublishers();
+    getAuthor();
+    getGenre();
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const data = {
+        title: e.target.title.value,
+        description: e.target.description.value,
+        release_data: e.target.release_data.value,
+        publisher_id: selectedPublisher.value,
+        authors: selectedAuthor,
+        genres: selectedGenre,
+        price: e.target.price.value,
+        discount: e.target.discount.value,
+      };
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/add-books`,
+        data
+      );
+      alert("Added Successfully");
+    } catch (err) {
+      alert("An error occurred. Try again later");
+      console.log(err);
+    }
+  };
+
   return (
     <div
       className="fixed w-screen h-screen bg-black/70 z-[1000] top-0 flex justify-center items-center theme-font"
@@ -24,7 +112,10 @@ export default function InsertBook({ setIsVisible }) {
                 />
               </div>
             </header>
-            <form className="w-full px-4 py-4 flex flex-col gap-3">
+            <form
+              className="w-full px-4 py-4 flex flex-col gap-3"
+              onSubmit={handleSubmit}
+            >
               <div className="input-group w-full">
                 <input
                   placeholder=" "
@@ -60,6 +151,41 @@ export default function InsertBook({ setIsVisible }) {
                 </label>
               </div>
               <div className="input-group w-full">
+                <Select
+                  className="input-field3 p-0 rounded my-react-select-container"
+                  classNamePrefix="my-react-select"
+                  defaultValue={selectedPublisher}
+                  onChange={setSelectedPublisher}
+                  options={publisher}
+                  isMulti={false}
+                />
+                <label className="input-placeholder3">
+                  Publisher of the Book
+                </label>
+              </div>
+              <div className="input-group w-full">
+                <Select
+                  className="input-field3 p-0 rounded my-react-select-container"
+                  classNamePrefix="my-react-select"
+                  defaultValue={selectedAuthor}
+                  onChange={setSelectedAuthor}
+                  options={author}
+                  isMulti={true}
+                />
+                <label className="input-placeholder3">Author of the Book</label>
+              </div>
+              <div className="input-group w-full">
+                <Select
+                  className="input-field3 p-0 rounded my-react-select-container"
+                  classNamePrefix="my-react-select"
+                  defaultValue={selectedGenre}
+                  onChange={setSelectedGenre}
+                  options={genre}
+                  isMulti={true}
+                />
+                <label className="input-placeholder3">Genre of the Book</label>
+              </div>
+              <div className="input-group w-full">
                 <input
                   placeholder=" "
                   autoComplete="off"
@@ -81,6 +207,9 @@ export default function InsertBook({ setIsVisible }) {
                   Discount of the Book
                 </label>
               </div>
+              <button type="submit" className="w-full bg-blue-600 py-2 rounded">
+                Submit
+              </button>
             </form>
           </>
         </motion.div>
