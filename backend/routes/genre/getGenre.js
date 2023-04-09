@@ -16,5 +16,8 @@ router.get("/get-genre", async (req, res) => {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 });
+  
+router.use('/genre' , require('./insertGenre'));
+router.use('/genre' , require('./deleteGenre'));
 
 module.exports = router;

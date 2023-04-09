@@ -17,4 +17,7 @@ router.get("/get-publisher", async (req, res) => {
   }
 });
 
+router.use('/publisher' , require('./insertPublisher'));
+router.use('/publisher' , require('./deletePublisher'));
+
 module.exports = router;
