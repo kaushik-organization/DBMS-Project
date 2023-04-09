@@ -21,7 +21,7 @@ export default function BooksGenre() {
 
   return (
     <div className="p-1 w-full">
-      <table className="border border-white/30">
+      <table className="border border-white/30 w-full">
         <thead>
           <tr className="border border-white/30">
             {data?.length != 0 &&

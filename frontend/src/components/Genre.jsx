@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
 
-export default function Genre() {
+export default function Genre({ setIsGenre }) {
   const [data, setData] = useState([]);
   const getGenres = async () => {
     try {
@@ -20,7 +20,13 @@ export default function Genre() {
   }, []);
 
   return (
-    <div className="p-1 w-full">
+    <div className="p-1 w-full flex flex-col gap-2">
+      <button
+        className="bg-blue-600 px-6 p-1 rounded-sm w-fit"
+        onClick={() => setIsGenre(true)}
+      >
+        Insert Genre
+      </button>
       <table className="border border-white/30">
         <thead>
           <tr className="border border-white/30">
