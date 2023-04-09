@@ -31,3 +31,4 @@ DDL :-<br /><br />
 // alter table Sales add CONSTRAINT check_book_id_3 check(book_id between 'BOOK0000' and 'BOOK9999');<br />
 // alter table User add CONSTRAINT check_user_id check(user_id between 'USER0000' and 'USER9999');<br />
 // alter table User add CONSTRAINT check_basket_id_1 check(basket_id between 'BASK0000' and 'BASK9999');<br />
+// alter table User modify contact_no varchar(15);
