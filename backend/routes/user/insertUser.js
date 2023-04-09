@@ -24,7 +24,7 @@ router.put("/", async (req, res) => {
         user_id = 'USER' + num;
         bask_id = 'BASK' + num;
     }
-    const res_cd = await cd.uploader.upload(profile_pic.path , {public_id : user_id});
+    const res_cd = await cd.uploader.upload(profile_pic.path , {public_id : "multiple/DBMS/User" + user_id});
     const profile_pic_url = res_cd.secure_url;
     conn.query(`insert into User values ('${user_id}' , '${email}' , '${name}' , '${profile_pic_url}' , '${address}' , '${contact_no}' , '${bask_id}');`)
     database.connectionEnd(conn);
