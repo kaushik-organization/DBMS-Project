@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
 
-export default function Author() {
+export default function Author({ setIsAuthor }) {
   const [data, setData] = useState([]);
   const getAuthor = async () => {
     try {
@@ -20,7 +20,13 @@ export default function Author() {
   }, []);
 
   return (
-    <div className="p-1 w-full">
+    <div className="p-1 w-full flex flex-col gap-2">
+      <button
+        className="bg-blue-600 px-6 p-1 rounded-sm w-fit"
+        onClick={() => setIsAuthor(true)}
+      >
+        Insert Author
+      </button>
       <table className="border border-white/30">
         <thead>
           <tr className="border border-white/30">

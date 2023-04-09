@@ -11,9 +11,15 @@ import Genre from "../../components/Genre";
 import BooksAuthor from "../../components/BooksAuthor";
 import BooksGenre from "../../components/BooksGenre";
 import InsertBook from "../../components/InsertBook";
+import InsertAuthor from "../../components/InsertAuthor";
+import InsertPublisher from "../../components/InsertPublisher";
+import InsertGenre from "../../components/InsertGenre";
 
 export default function Dashboard() {
   const [isVisible, setIsVisible] = useState(false);
+  const [isAuthor, setIsAuthor] = useState(false);
+  const [isPublisher, setIsPublisher] = useState(false);
+  const [isGenre, setIsGenre] = useState(false);
   const [active, setActive] = useState(1);
   const navigate = useNavigate();
   useEffect(() => {
@@ -31,6 +37,9 @@ export default function Dashboard() {
   return (
     <>
       {isVisible && <InsertBook setIsVisible={setIsVisible} />}
+      {isAuthor && <InsertAuthor setIsAuthor={setIsAuthor} />}
+      {isPublisher && <InsertPublisher setIsPublisher={setIsPublisher} />}
+      {isGenre && <InsertGenre setIsGenre={setIsGenre} />}
       <div className="bg-black theme-font w-screen h-screen flex flex-col">
         <DashboardNavbar />
         <div className="flex flex-1">
@@ -40,10 +49,10 @@ export default function Dashboard() {
           <div className="flex-1 text-white overflow-x-scroll scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-[#222]">
             {
               {
-                1: <Author />,
+                1: <Author setIsAuthor={setIsAuthor} />,
                 2: <Books setIsVisible={setIsVisible} />,
-                3: <Publisher />,
-                4: <Genre />,
+                3: <Publisher setIsPublisher={setIsPublisher} />,
+                4: <Genre setIsGenre={setIsGenre} />,
                 5: <BooksAuthor />,
                 6: <BooksGenre />,
               }[active]

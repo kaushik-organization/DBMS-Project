@@ -11,10 +11,8 @@ app.use("/", require("./routes/publisher/getPublisher"));
 app.use("/", require("./routes/genre/getGenre"));
 app.use("/", require("./routes/books-author/getBooksAuthor"));
 app.use("/", require("./routes/books-genre/getBooksGenre"));
-app.use("/" , require('./routes/user/getUser'));
-
-const addBooks = require("./routes/books/addBooks");
-app.use("/", addBooks);
+app.use("/", require("./routes/user/getUser"));
+app.use("/", require("./routes/books/addBooks"));
 
 app.listen(process.env.PORT, () => {
   console.log("Conected successfully to ", process.env.PORT);

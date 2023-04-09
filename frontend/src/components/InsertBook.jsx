@@ -85,6 +85,7 @@ export default function InsertBook({ setIsVisible }) {
         data
       );
       alert("Added Successfully");
+      setIsVisible(false);
     } catch (err) {
       alert("An error occurred. Try again later");
       console.log(err);
