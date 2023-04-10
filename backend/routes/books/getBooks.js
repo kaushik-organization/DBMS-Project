@@ -17,4 +17,6 @@ router.get("/get-books", async (req, res) => {
   }
 });
 
+router.use('/' , require('./Q_2'));
+
 module.exports = router;
