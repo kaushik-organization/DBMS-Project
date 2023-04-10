@@ -70,9 +70,12 @@ export default function InsertBook({ setIsVisible }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      console.log(e.target.image.files[0]);
+      const formData = new FormData();
       const data = {
         title: e.target.title.value,
         description: e.target.description.value,
+        image: e.target.image.files[0],
         release_data: e.target.release_data.value,
         publisher_id: selectedPublisher.value,
         authors: selectedAuthor,
@@ -80,9 +83,11 @@ export default function InsertBook({ setIsVisible }) {
         price: e.target.price.value,
         discount: e.target.discount.value,
       };
+      formData.append("data", JSON.stringify(data));
+      formData.append("image", e.target.image.files[0]);
       const res = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/add-books`,
-        data
+        formData
       );
       alert("Added Successfully");
       setIsVisible(false);
@@ -137,6 +142,19 @@ export default function InsertBook({ setIsVisible }) {
                 />
                 <label className="input-placeholder2">
                   Description of the Book
+                </label>
+              </div>
+              <div className="input-group w-full">
+                <input
+                  placeholder=" "
+                  autoComplete="off"
+                  name="image"
+                  type="file"
+                  accept="image/*"
+                  className="input-field3 w-full rounded"
+                />
+                <label className="input-placeholder3">
+                  Cover image of the Book
                 </label>
               </div>
               <div className="input-group w-full">
