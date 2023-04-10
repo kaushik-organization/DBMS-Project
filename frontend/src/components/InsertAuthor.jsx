@@ -19,15 +19,15 @@ export default function InsertAuthor({ setIsAuthor }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const data = {
-        name: e.target.name.value,
-        about: e.target.about.value,
-        gender: selectedGender.value,
-        country: selectedCountry.value,
-      };
+      const formData = new FormData();
+      formData.append("name", e.target.name.value);
+      formData.append("about", e.target.about.value);
+      formData.append("gender", selectedGender.value);
+      formData.append("country", selectedCountry.value);
+      formData.append("image", e.target.image.files[0]);
       const res = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/author`,
-        data
+        formData
       );
       alert("Added Successfully");
       setIsAuthor(false);
@@ -81,6 +81,19 @@ export default function InsertAuthor({ setIsAuthor }) {
                   className="input-field2 w-full rounded"
                 />
                 <label className="input-placeholder2">About the Author</label>
+              </div>
+              <div className="input-group w-full">
+                <input
+                  placeholder=" "
+                  autoComplete="off"
+                  name="image"
+                  type="file"
+                  accept="image/*"
+                  className="input-field3 w-full rounded"
+                />
+                <label className="input-placeholder3">
+                  Cover image of the Book
+                </label>
               </div>
               <div className="input-group w-full">
                 <Select
