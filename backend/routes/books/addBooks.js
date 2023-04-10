@@ -1,13 +1,20 @@
 const router = require("express").Router();
 const database = require("../../database");
+const cd = require("./../../config/cloudinary");
+const formidable = require("express-formidable");
+router.use(formidable());
 
 router.post("/add-books", async (req, res) => {
   try {
     const conn = await database.connectionStart();
 
-    const data = req.body;
-    console.log(data);
+    let { data } = req.fields;
+    data = JSON.parse(data);
+    const { image } = req.files;
 
+    const res_cd = await cd.uploader.upload(image.path);
+    data.image = res_cd.secure_url;
+    // console.log(data);
     const query0 = "select book_id from Books order by book_id desc limit 1";
     const [rows] = await conn.query(query0);
     let book_id;
@@ -18,9 +25,9 @@ router.post("/add-books", async (req, res) => {
         .padStart(4, "0");
       book_id = "BOOK" + toint;
     }
-    console.log(book_id);
+    // console.log(book_id);
 
-    const query1 = "insert into Books values (?, ?, ?, ?, 0, ?, ?, ?)";
+    const query1 = "insert into Books values (?, ?, ?, ?, 0, ?, ?, ?, ?)";
     await conn.query(query1, [
       book_id,
       data.title,
@@ -29,6 +36,7 @@ router.post("/add-books", async (req, res) => {
       data.release_data,
       data.price,
       data.discount,
+      data.image,
     ]);
 
     const query2 = "insert into Books_Genre values ?";
@@ -36,7 +44,7 @@ router.post("/add-books", async (req, res) => {
     for (let item of data.genres) {
       values.push([book_id, item.value]);
     }
-    console.log(values);
+    // console.log(values);
     await conn.query(query2, [values]);
 
     const query3 = "insert into Books_Author values ?";

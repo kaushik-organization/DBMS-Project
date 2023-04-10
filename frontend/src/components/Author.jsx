@@ -53,7 +53,7 @@ export default function Author({ setIsAuthor }) {
                     type={"text"}
                     className="bg-transparent p-2 px-6 text-center w-full"
                     disabled
-                    value={val.toString() ? val : "null"}
+                    value={val && val.toString() ? val : "null"}
                   />
                 </td>
               ))}
