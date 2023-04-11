@@ -7,6 +7,7 @@ app.use(cors());
 
 app.use("/", require("./routes/author/getAuthor"));
 app.use("/", require("./routes/books/getBooks"));
+app.use("/", require("./routes/books/fetchCSV"));
 app.use("/", require("./routes/publisher/getPublisher"));
 app.use("/", require("./routes/genre/getGenre"));
 app.use("/", require("./routes/books-author/getBooksAuthor"));
