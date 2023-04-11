@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const database = require("../../database");
 const ObjectsToCsv = require("objects-to-csv");
-const fs = require("fs");
 
 router.get("/get-csv", async (req, res) => {
   try {
@@ -22,7 +21,5 @@ router.get("/get-csv", async (req, res) => {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 });
-
-router.use("/", require("./Q_2"));
 
 module.exports = router;
