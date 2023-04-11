@@ -13,7 +13,7 @@ app.use("/", require("./routes/books-author/getBooksAuthor"));
 app.use("/", require("./routes/books-genre/getBooksGenre"));
 app.use("/", require("./routes/user/getUser"));
 app.use("/", require("./routes/books/addBooks"));
-
+app.use("/",require("./routes/avaliableBooks"));
 app.listen(process.env.PORT, () => {
   console.log("Conected successfully to ", process.env.PORT);
 });
