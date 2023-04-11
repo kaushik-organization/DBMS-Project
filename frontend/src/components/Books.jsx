@@ -22,12 +22,21 @@ export default function Books({ setIsVisible }) {
   return (
     <>
       <div className="p-1 w-full flex flex-col gap-2">
-        <button
-          className="bg-blue-600 px-6 p-1 rounded-sm w-fit"
-          onClick={() => setIsVisible(true)}
-        >
-          Insert Book
-        </button>
+        <div className="flex gap-2">
+          <button
+            className="bg-blue-600 px-6 p-1 rounded-sm w-fit"
+            onClick={() => setIsVisible(true)}
+          >
+            Insert Book
+          </button>
+          <a
+            className="bg-green-600 px-6 p-1 rounded-sm w-fit"
+            href={`${import.meta.env.VITE_BACKEND_URL}/get-csv`}
+            target="_blank"
+          >
+            Download Recommendation file.csv
+          </a>
+        </div>
         <table className="border border-white/30">
           <thead>
             <tr className="border border-white/30">
