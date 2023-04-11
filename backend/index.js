@@ -7,13 +7,15 @@ app.use(cors());
 
 app.use("/", require("./routes/author/getAuthor"));
 app.use("/", require("./routes/books/getBooks"));
+app.use("/", require("./routes/books/fetchCSV"));
 app.use("/", require("./routes/publisher/getPublisher"));
 app.use("/", require("./routes/genre/getGenre"));
 app.use("/", require("./routes/books-author/getBooksAuthor"));
 app.use("/", require("./routes/books-genre/getBooksGenre"));
 app.use("/", require("./routes/user/getUser"));
 app.use("/", require("./routes/books/addBooks"));
-
+app.use("/",require("./routes/avaliableBooks"));
+app.use("/",require("./routes/bookQuantity"));
 app.listen(process.env.PORT, () => {
   console.log("Conected successfully to ", process.env.PORT);
 });
