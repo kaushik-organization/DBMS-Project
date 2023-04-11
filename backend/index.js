@@ -15,6 +15,7 @@ app.use("/", require("./routes/user/getUser"));
 app.use("/", require("./routes/books/addBooks"));
 app.use("/",require("./routes/avaliableBooks"));
 app.use("/",require("./routes/bookQuantity"));
+app.use("/",require("./routes/commonAuthors"));
 app.listen(process.env.PORT, () => {
   console.log("Conected successfully to ", process.env.PORT);
 });
