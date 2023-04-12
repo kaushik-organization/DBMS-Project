@@ -42,11 +42,11 @@ export default function Dashboard() {
       {isGenre && <InsertGenre setIsGenre={setIsGenre} />}
       <div className="bg-black theme-font w-screen h-screen flex flex-col">
         <DashboardNavbar />
-        <div className="flex flex-1">
+        <div className="flex flex-1 overflow-hidden">
           <div className="w-[300px] border-r border-white/20 shrink-0">
             <LeftComponents active={active} setActive={setActive} />
           </div>
-          <div className="flex-1 text-white overflow-x-scroll scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-[#222]">
+          <div className="flex-1 text-white overflow-scroll scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-[#222]">
             {
               {
                 1: <Author setIsAuthor={setIsAuthor} />,

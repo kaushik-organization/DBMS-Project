@@ -1,9 +1,11 @@
 const router = require("express").Router();
 const database = require("../../database");
+const formidable = require("express-formidable");
+router.use(formidable());
 
 router.post("/", async (req, res) => {
   try {
-    const { name, contact_no, address } = req.body;
+    const { name, contact_no, address } = req.fields;
     if (!name) return res.status(501).send("");
     const conn = await database.connectionStart();
     let id = "PUBL0001";

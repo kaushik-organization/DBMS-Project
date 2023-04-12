@@ -8,6 +8,7 @@ export default function Home() {
   const [auth, setAuth] = useState(false);
   const [message, setMessage] = useState("");
   const [name, setName] = useState("");
+  const [photo, setPhoto] = useState("");
   axios.defaults.withCredentials = true;
 
   useEffect(() => {
@@ -15,6 +16,7 @@ export default function Home() {
       if (res.data.Status === "success") {
         setAuth(true);
         setName(res.data.name);
+        setPhoto(res.data.profile_pic);
       } else {
         setAuth(false);
         setMessage(res.data.Error);
@@ -26,6 +28,7 @@ export default function Home() {
       {auth ? (
         <div>
           <h3>You are authorized {name}</h3>
+          <img src={photo} />
           <button>Logout</button>
         </div>
       ) : (
