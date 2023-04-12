@@ -14,7 +14,7 @@ router.post("/register", async (req, res) => {
     const { profile_pic } = req.files;
     let hashPassword = await bcrypt.hash(password.toString(), salt);
 
-    console.log(req.fields, req.files, hashPassword);
+    // console.log(req.fields, req.files, hashPassword);
 
     if (!name || !email) return res.sendStatus(501);
 
@@ -58,7 +58,7 @@ router.post("/login", async (req, res) => {
     console.log(email, password);
     const sql = "SELECT * from User where email = ?";
     const rows = await conn.query(sql, [email]);
-    if (!rows[0]) {
+    if (!rows[0].length) {
       return res.status(200).json({ message: "No such email found" });
     }
     let check;
