@@ -8,14 +8,13 @@ export default function InsertPublisher({ setIsPublisher }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const data = {
-        name: e.target.name.value,
-        contact_no: e.target.contact_no.value,
-        address: e.target.address.value,
-      };
+      const formData = new FormData();
+      formData.append("name", e.target.name.value);
+      formData.append("contact_no", e.target.contact_no.value);
+      formData.append("address", e.target.address.value);
       const res = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/publisher`,
-        data
+        formData
       );
       alert("Added Successfully");
       setIsPublisher(false);
