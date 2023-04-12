@@ -12,6 +12,7 @@ const verifyUser = (req, res, next) => {
         return res.json({ Error: "Token is invalid" });
       } else {
         req.name = decoded.name;
+        req.profile_pic = decoded.profile_pic;
         next();
       }
     });
@@ -19,7 +20,11 @@ const verifyUser = (req, res, next) => {
 };
 
 router.get("/verify-user", verifyUser, (req, res) => {
-  return res.json({ Status: "success", name: req.name });
+  return res.json({
+    Status: "success",
+    name: req.name,
+    profile_pic: req.profile_pic,
+  });
 });
 
 router.get("/logout", (req, res) => {

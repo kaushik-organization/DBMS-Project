@@ -7,8 +7,8 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ["http://localhost:5173" , "http://127.0.0.1:5173"],
-    methods: ["POST", "GET" , "PUT" , "DELETE"],
+    origin: ["http://localhost:5173", "http://127.0.0.1:5173"],
+    methods: ["POST", "GET", "PUT", "DELETE"],
     credentials: true,
   })
 );
@@ -23,11 +23,14 @@ app.use("/", require("./routes/books-genre/getBooksGenre"));
 app.use("/", require("./routes/user/getUser"));
 app.use("/", require("./routes/books/addBooks"));
 app.use("/", require("./routes/user/verify-user"));
-app.use("/",require("./routes/avaliableBooks"));
-app.use("/",require("./routes/bookQuantity"));
-app.use("/",require("./routes/commonAuthors"));
-app.use("/",require("./routes/booksInBasketandPrice"));
+app.use("/", require("./routes/avaliableBooks"));
+app.use("/", require("./routes/bookQuantity"));
+app.use("/", require("./routes/commonAuthors"));
+app.use("/", require("./routes/booksInBasketandPrice"));
 // app.use("/",require("./routes/priceInBasket"));
+app.use("/", require("./routes/books/fetchBookId"));
+app.use("/", require("./routes/books/getBooksId"));
+
 app.listen(process.env.PORT, () => {
   console.log("Conected successfully to ", process.env.PORT);
 });

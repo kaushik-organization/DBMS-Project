@@ -32,7 +32,9 @@ router.post("/register", async (req, res) => {
       user_id = "USER" + num;
       bask_id = "BASK" + num;
     }
-    const res_cd = await cd.uploader.upload(profile_pic.path , {public_id : "multiple/DBMS/User" + user_id});
+    const res_cd = await cd.uploader.upload(profile_pic.path, {
+      public_id: "multiple/DBMS/User" + user_id,
+    });
     const profile_pic_url = res_cd.secure_url;
     await conn.query(
       `insert into User values (${JSON.stringify(user_id)} , ${JSON.stringify(
@@ -69,9 +71,14 @@ router.post("/login", async (req, res) => {
       }
       if (same) {
         const name = rows[0][0].name;
-        const token = jwt.sign({ name }, process.env.JWT_SECRET_KEY, {
-          expiresIn: "1d",
-        });
+        const profile_pic = rows[0][0].profile_pic;
+        const token = jwt.sign(
+          { name, profile_pic },
+          process.env.JWT_SECRET_KEY,
+          {
+            expiresIn: "1d",
+          }
+        );
         res.cookie("token", token);
         return res.status(200).json({ Status: "success" });
       } else {
