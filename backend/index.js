@@ -28,6 +28,11 @@ app.use("/",require("./routes/bookQuantity"));
 app.use("/",require("./routes/commonAuthors"));
 app.use("/",require("./routes/booksInBasketandPrice"));
 // app.use("/",require("./routes/priceInBasket"));
+app.use("/",require("./routes/searchBook"));
+app.use("/",require("./routes/sortPrice"))
+app.use("/",require("./routes/sortRating"));
+app.use("/",require("./routes/pricesInRange"));
+app.use("/",require("./routes/ratingInRange"));
 app.listen(process.env.PORT, () => {
   console.log("Conected successfully to ", process.env.PORT);
 });
