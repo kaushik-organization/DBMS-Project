@@ -27,7 +27,7 @@ router.post("/add-books", async (req, res) => {
     }
     // console.log(book_id);
 
-    const query1 = "insert into Books values (?, ?, ?, ?, 0, ?, ?, ?, ?)";
+    const query1 = "insert into Books values (?, ?, ?, ?, ?, ?, ?, ?, 4.2)";
     await conn.query(query1, [
       book_id,
       data.title,
