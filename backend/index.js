@@ -31,8 +31,16 @@ app.use("/", require("./routes/commonAuthors"));
 app.use("/", require("./routes/booksInBasketandPrice"));
 
 // app.use("/",require("./routes/priceInBasket"));
+
+app.use("/",require("./routes/searchBook"));
+app.use("/",require("./routes/sortPrice"))
+app.use("/",require("./routes/sortRating"));
+app.use("/",require("./routes/pricesInRange"));
+app.use("/",require("./routes/ratingInRange"));
+app.use("/",require("./routes/searchBookName"));
 app.use("/", require("./routes/books/fetchBookId"));
 app.use("/", require("./routes/books/getBooksId"));
+
 
 app.listen(process.env.PORT, () => {
   console.log("Conected successfully to ", process.env.PORT);
