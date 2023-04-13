@@ -1,10 +1,15 @@
 const router = require("express").Router();
 const database = require("../../database");
+const formidable = require("express-formidable");
+router.use(formidable());
 
-router.get("/get-books", async (req, res) => {
+router.post("/get-books-id", async (req, res) => {
   try {
     const conn = await database.connectionStart();
-    const query = `SELECT * FROM Books`;
+    let { book_id } = req.fields;
+    book_id = JSON.parse(book_id);
+    const str = book_id.map((item) => `'${item}'`).join(", ");
+    const query = `SELECT * FROM Books where book_id in (${str})`;
     const [rows] = await conn.query(query);
     if (!rows[0]) {
       return res.status(200).json({ message: `Couldn't find the table` });
@@ -16,8 +21,5 @@ router.get("/get-books", async (req, res) => {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 });
-
-router.use('/' , require('./Q_2'));
-router.use('/' , require('./Q_1'));
 
 module.exports = router;

@@ -8,12 +8,11 @@ export default function InsertGenre({ setIsGenre }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const data = {
-        name: e.target.name.value,
-      };
+      const formData = new FormData();
+      formData.append("name", e.target.name.value);
       const res = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/genre`,
-        data
+        formData
       );
       alert("Added Successfully");
       setIsGenre(false);
