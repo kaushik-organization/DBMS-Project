@@ -24,7 +24,7 @@ app.use("/", require("./routes/user/getUser"));
 app.use("/", require("./routes/books/addBooks"));
 app.use("/", require("./routes/user/verify-user"));
 
-app.use("/" , require("./routes/PurchesBook"))
+app.use("/" , require("./routes/AddToCart"))
 app.use("/", require("./routes/avaliableBooks"));
 app.use("/", require("./routes/bookQuantity"));
 app.use("/", require("./routes/commonAuthors"));
@@ -41,6 +41,7 @@ app.use("/",require("./routes/searchBookName"));
 app.use("/", require("./routes/books/fetchBookId"));
 app.use("/", require("./routes/books/getBooksId"));
 
+app.use("/purchaseBasket" , require("./routes/purchaseBasket"))
 
 app.listen(process.env.PORT, () => {
   console.log("Conected successfully to ", process.env.PORT);
