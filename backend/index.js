@@ -37,7 +37,7 @@ app.use("/",require("./routes/sortPrice"))
 app.use("/",require("./routes/sortRating"));
 app.use("/",require("./routes/pricesInRange"));
 app.use("/",require("./routes/ratingInRange"));
-
+app.use("/",require("./routes/searchBookName"));
 app.use("/", require("./routes/books/fetchBookId"));
 app.use("/", require("./routes/books/getBooksId"));
 
