@@ -13,14 +13,19 @@ router.get("/booksInbasket/:basketId",async(req,res)=>{
         FROM Books as b
         INNER JOIN Basket_Books as bb ON b.book_id = bb.book_id
         WHERE bb.basket_id = '${basket_id}';`
+        const query2 = `SELECT SUM((b.price - ((b.price * b.discount)/100)) * bb.count) AS discount_cost
+        FROM Books as b
+        INNER JOIN Basket_Books as bb ON b.book_id = bb.book_id
+        WHERE bb.basket_id = '${basket_id}';`
         const [rows] = await conn.query(query);
         const [[count]] = await conn.query(query1);
+        const [[count1]] = await conn.query(query2);
         if (!rows[0]) {
           return res.status(400).json({ message: `Couldn't find the table` });
         }
         // console.log(count.total_cost);
         database.connectionEnd(conn);
-        return res.status(200).send({ message: "Everything is ok!",data:rows,totalCost:count.total_cost });
+        return res.status(200).send({ message: "Everything is ok!",data:rows,totalCost:count.total_cost,discountCost:count1.discount_cost });
     //    console.log(req.params);
     //    return res.status(200).json({message:"Everything is ok!"});
     }catch(err){

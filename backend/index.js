@@ -42,7 +42,7 @@ app.use("/", require("./routes/books/fetchBookId"));
 app.use("/", require("./routes/books/getBooksId"));
 
 app.use("/purchaseBasket" , require("./routes/purchaseBasket"))
-
+app.use("/",require("./routes/sortwithDiscount"));
 app.listen(process.env.PORT, () => {
   console.log("Conected successfully to ", process.env.PORT);
 });
