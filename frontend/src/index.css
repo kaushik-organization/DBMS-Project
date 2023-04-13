@@ -7,6 +7,9 @@
     .gradient-black {
         background: linear-gradient(180deg, transparent, #000);
     }
+    .inblur {
+        box-shadow: 0 0 40px 10px white inset;
+    }
     .theme-font {
         font-family: 'Exo 2', sans-serif;
     }
