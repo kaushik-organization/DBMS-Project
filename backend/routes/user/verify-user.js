@@ -13,6 +13,7 @@ const verifyUser = (req, res, next) => {
       } else {
         req.name = decoded.name;
         req.profile_pic = decoded.profile_pic;
+        req.basket_id = decoded.basket_id;
         next();
       }
     });
@@ -24,6 +25,7 @@ router.get("/verify-user", verifyUser, (req, res) => {
     Status: "success",
     name: req.name,
     profile_pic: req.profile_pic,
+    basket_id: req.basket_id,
   });
 });
 

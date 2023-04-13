@@ -72,8 +72,9 @@ router.post("/login", async (req, res) => {
       if (same) {
         const name = rows[0][0].name;
         const profile_pic = rows[0][0].profile_pic;
+        const basket_id = rows[0][0].basket_id;
         const token = jwt.sign(
-          { name, profile_pic },
+          { name, profile_pic, basket_id },
           process.env.JWT_SECRET_KEY,
           {
             expiresIn: "1d",

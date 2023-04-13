@@ -1,11 +1,14 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useEffect } from "react";
+import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import StoreBar from "../components/StoreBar";
 
 export default function Store() {
   const [books, setBooks] = useState([]);
+  const [basketId, setBasketId] = useState(null);
+  const [cart, setCart] = useState([]);
   useEffect(() => {
     axios
       .post(`${import.meta.env.VITE_BACKEND_URL}/books/sorted`)
@@ -13,6 +16,25 @@ export default function Store() {
         setBooks(res.data);
       });
   }, []);
+
+  useEffect(() => {
+    axios.get(`${import.meta.env.VITE_BACKEND_URL}/verify-user`).then((res) => {
+      if (res.data.Status === "success") {
+        setBasketId(res.data.basket_id);
+        axios
+          .get(
+            `${import.meta.env.VITE_BACKEND_URL}/booksInbasket/${
+              res.data.basket_id
+            }`
+          )
+          .then((res) => setCart(res.data?.data));
+      } else {
+        setAuth(false);
+        setMessage(res.data.Error);
+      }
+    });
+  }, []);
+
   return (
     <div className="flex flex-col gap-2 w-full h-screen bg-zinc-900 theme-font text-white">
       <StoreBar />
@@ -35,9 +57,24 @@ export default function Store() {
                 <p>Rs. {item.price - (item.price * item.discount) / 100}</p>
                 <s className="text-red-600">Rs. {item.price}</s>
               </div>
-              <button className="bg-green-600 p-1 rounded-sm hover:bg-orange-600 transition-all">
-                Add to Cart
-              </button>
+              {cart?.filter((e) => e.book_id === item.book_id).length > 0 ? (
+                <div className="flex items-center h-8">
+                  <div className="p-1 px-1.5 h-full items-center bg-blue-600 flex justify-center rounded-l-sm">
+                    <AiOutlineMinus className="w-4 h-4 text-black" />
+                  </div>
+                  <button className="bg-white p-1 flex-1 w-fit text-black">
+                    Quantity{" "}
+                    {cart.filter((e) => e.book_id === item.book_id)[0].count}
+                  </button>
+                  <div className="p-1 px-1.5 h-full items-center bg-blue-600 flex justify-center rounded-r-sm">
+                    <AiOutlinePlus className="w-4 h-4 text-black" />
+                  </div>
+                </div>
+              ) : (
+                <button className="bg-green-600 p-1 rounded-sm hover:bg-orange-600 transition-all">
+                  Add to Cart
+                </button>
+              )}
             </Link>
           ))}
         </div>

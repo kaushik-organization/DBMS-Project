@@ -14,11 +14,11 @@ export default function StoreBar() {
     axios.get(`${import.meta.env.VITE_BACKEND_URL}/verify-user`).then((res) => {
       if (res.data.Status === "success") {
         setAuth(true);
-        setName(res.data.name);
-        setPhoto(res.data.profile_pic);
+        setName(res.data?.name);
+        setPhoto(res.data?.profile_pic);
       } else {
         setAuth(false);
-        setMessage(res.data.Error);
+        setMessage(res.data?.Error);
       }
     });
   }, []);
