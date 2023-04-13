@@ -6,8 +6,11 @@ router.post("/common-author",async(req,res)=>{
     try{
        const {BOOKID} = req.fields
     //    console.log(BOOKID.length);
-       const str = BOOKID.join(',');
-    //    console.log(str);
+    // console.log(BOOKID);
+    // console.log(typeof(BOOKID));
+    //    const str = "'"+BOOKID.join(',')+"'";
+    const str = BOOKID.map((item) => `'${item}'`).join(", ");
+        // console.log(str);
        const conn = await database.connectionStart();
        const query = `select Author.author_id , Author.name 
        From Author
@@ -20,7 +23,7 @@ router.post("/common-author",async(req,res)=>{
         return res.status(200).json({ message: `Couldn't find the table` });
        }
        database.connectionEnd(conn);
-       return res.status(200).send({ message: "Everything is ok!", data: rows });
+       return res.status(200).send({ message: "Everything is ok!" ,data:rows});
     }catch(err){
         console.log(err);
         return res.status(500).json({message : "Internal Server Error"});
