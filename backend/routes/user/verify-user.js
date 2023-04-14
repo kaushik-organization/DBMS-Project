@@ -11,6 +11,7 @@ const verifyUser = (req, res, next) => {
       if (err) {
         return res.json({ Error: "Token is invalid" });
       } else {
+        req.user_id = decoded.user_id;
         req.name = decoded.name;
         req.profile_pic = decoded.profile_pic;
         req.basket_id = decoded.basket_id;
@@ -23,6 +24,7 @@ const verifyUser = (req, res, next) => {
 router.get("/verify-user", verifyUser, (req, res) => {
   return res.json({
     Status: "success",
+    user_id: req.user_id,
     name: req.name,
     profile_pic: req.profile_pic,
     basket_id: req.basket_id,

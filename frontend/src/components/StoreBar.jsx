@@ -8,11 +8,13 @@ export default function StoreBar() {
   const [message, setMessage] = useState("");
   const [name, setName] = useState("");
   const [photo, setPhoto] = useState("");
+  const [userId, setUserId] = useState("");
   axios.defaults.withCredentials = true;
 
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_BACKEND_URL}/verify-user`).then((res) => {
       if (res.data.Status === "success") {
+        setUserId(res.data?.user_id);
         setAuth(true);
         setName(res.data?.name);
         setPhoto(res.data?.profile_pic);
@@ -37,10 +39,12 @@ export default function StoreBar() {
 
   return (
     <div className="w-full py-3 px-4 flex justify-between gap-2 items-center">
-      <img
-        src="/bookstore-logo/png/logo-no-background.png"
-        className="w-40 invert mix-blend-luminosity"
-      />
+      <Link to={"/store"}>
+        <img
+          src="/bookstore-logo/png/logo-no-background.png"
+          className="w-40 invert mix-blend-luminosity"
+        />
+      </Link>
       <div className="flex-1 flex mx-20 items-center">
         <input
           type={"text"}
@@ -61,7 +65,9 @@ export default function StoreBar() {
               <br />
               {name}
             </p>
-            <AiOutlineShoppingCart className="w-8 h-8 text-blue-600" />
+            <Link to={`/account/${userId.toLowerCase()}/cart`}>
+              <AiOutlineShoppingCart className="w-8 h-8 text-blue-600" />
+            </Link>
             <div className="w-10 aspect-square rounded-full overflow-hidden flex justify-center items-center p-1 border border-neutral-500 cursor-pointer">
               <img src={photo} className="object-cover rounded-full" />
             </div>

@@ -70,11 +70,12 @@ router.post("/login", async (req, res) => {
         return res.status(500).json({ Error: "Internal Server Error" });
       }
       if (same) {
+        const user_id = rows[0][0].user_id;
         const name = rows[0][0].name;
         const profile_pic = rows[0][0].profile_pic;
         const basket_id = rows[0][0].basket_id;
         const token = jwt.sign(
-          { name, profile_pic, basket_id },
+          { user_id, name, profile_pic, basket_id },
           process.env.JWT_SECRET_KEY,
           {
             expiresIn: "1d",
