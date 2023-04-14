@@ -57,23 +57,10 @@ export default function Orders({ userId }) {
   };
 
   return (
-    <div className="p-4 flex flex-col gap-2">
+    <div className="p-4 flex flex-col-reverse gap-2">
       {orders &&
         orders.map((item, index) => (
           <>
-            <div
-              className="border border-zinc-500 cursor-pointer transition-all flex justify-between items-center rounded-md p-2 px-4 bg-zinc-800/90"
-              key={index}
-              onClick={() => handleToggle(index)}
-            >
-              <p className="text-zinc-300">{item.order_id}</p>
-              <div className="flex items-center gap-2">
-                <p className="text-sm text-zinc-400">
-                  {constructDate(item.Date)}
-                </p>
-                <AiOutlineArrowRight className="h-6 w-6" />
-              </div>
-            </div>
             {visible && !visible[index] ? (
               <div className="flex flex-wrap gap-2">
                 {details[index] &&
@@ -105,6 +92,19 @@ export default function Orders({ userId }) {
             ) : (
               ""
             )}
+            <div
+              className="border border-zinc-500 cursor-pointer transition-all flex justify-between items-center rounded-md p-2 px-4 bg-zinc-800/90"
+              key={index}
+              onClick={() => handleToggle(index)}
+            >
+              <p className="text-zinc-300">{item.order_id}</p>
+              <div className="flex items-center gap-2">
+                <p className="text-sm text-zinc-400">
+                  {constructDate(item.Date)}
+                </p>
+                <AiOutlineArrowRight className="h-6 w-6" />
+              </div>
+            </div>
           </>
         ))}
     </div>
