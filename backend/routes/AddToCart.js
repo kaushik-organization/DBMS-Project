@@ -10,9 +10,7 @@ router.post("/AddToCart", async (req, res) => {
     `select quantity as Available from Sales where book_id = '${book_id}'`
   );
 
-  if (!Available) return res.sendStatus(210);
-  if (Available.Available < quantity)
-    return res.status(209).send("Not Available");
+  if (!Available || Available.Available < quantity)  return res.status(209).send("Not Available");
 
   const basket_id = user_id.replace("USER", "BASK");
 
