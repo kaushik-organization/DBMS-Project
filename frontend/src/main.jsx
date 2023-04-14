@@ -10,6 +10,7 @@ import BookDetails from "./pages/bookDetails";
 import Home from "./pages/home";
 import PageNotFound from "./pages/pageNotFound";
 import Store from "./pages/store";
+import Account from "./pages/account";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
   {
     path: "/book/:bookId",
     element: <BookDetails />,
+  },
+  {
+    path: "/account/:userId/:options",
+    element: <Account />,
   },
   {
     path: "*",
