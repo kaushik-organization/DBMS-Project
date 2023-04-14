@@ -9,6 +9,7 @@ export default function Store() {
   const [books, setBooks] = useState([]);
   const [basketId, setBasketId] = useState(null);
   const [cart, setCart] = useState([]);
+  const [userId, setUserId] = useState("");
   useEffect(() => {
     axios
       .post(`${import.meta.env.VITE_BACKEND_URL}/books/sorted`)
@@ -17,9 +18,10 @@ export default function Store() {
       });
   }, []);
 
-  useEffect(() => {
+  const fetchCart = async () => {
     axios.get(`${import.meta.env.VITE_BACKEND_URL}/verify-user`).then((res) => {
       if (res.data.Status === "success") {
+        setUserId(res.data.user_id);
         setBasketId(res.data.basket_id);
         axios
           .get(
@@ -28,12 +30,55 @@ export default function Store() {
             }`
           )
           .then((res) => setCart(res.data?.data));
-      } else {
-        setAuth(false);
-        setMessage(res.data.Error);
       }
     });
+  };
+
+  useEffect(() => {
+    fetchCart();
   }, []);
+
+  const handleAdd = async (e, book_id) => {
+    try {
+      e.stopPropagation();
+      e.preventDefault();
+      const formData = new FormData();
+      formData.append("book_id", book_id);
+      formData.append("user_id", userId);
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/AddToCart`,
+        formData
+      );
+      if (res.status === 209) {
+        alert("Sorry! The book is not currently available");
+      }
+      if (res.status === 210) {
+        alert("Currently unavailable");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    fetchCart();
+  };
+
+  const handleRemove = async (e, book_id) => {
+    try {
+      e.stopPropagation();
+      e.preventDefault();
+      const formData = new FormData();
+      formData.append("book_id", book_id);
+      formData.append("user_id", userId);
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/removeToCart`,
+        formData
+      );
+    } catch (err) {
+      console.log(err);
+    }
+    axios
+      .get(`${import.meta.env.VITE_BACKEND_URL}/booksInbasket/${basketId}`)
+      .then((res) => setCart(res.data?.data));
+  };
 
   return (
     <div className="flex flex-col gap-2 w-full h-screen bg-zinc-900 theme-font text-white">
@@ -59,19 +104,28 @@ export default function Store() {
               </div>
               {cart?.filter((e) => e.book_id === item.book_id).length > 0 ? (
                 <div className="flex items-center h-8">
-                  <div className="p-1 px-1.5 h-full items-center bg-blue-600 flex justify-center rounded-l-sm">
+                  <div
+                    className="p-1 px-1.5 h-full items-center bg-blue-600 flex justify-center rounded-l-sm"
+                    onClick={(e) => handleRemove(e, item.book_id)}
+                  >
                     <AiOutlineMinus className="w-4 h-4 text-black" />
                   </div>
-                  <button className="bg-white p-1 flex-1 w-fit text-black">
+                  <div className="text-center bg-white p-1 flex-1 w-fit text-black">
                     Quantity{" "}
                     {cart.filter((e) => e.book_id === item.book_id)[0].count}
-                  </button>
-                  <div className="p-1 px-1.5 h-full items-center bg-blue-600 flex justify-center rounded-r-sm">
+                  </div>
+                  <div
+                    className="p-1 px-1.5 h-full items-center bg-blue-600 flex justify-center rounded-r-sm"
+                    onClick={(e) => handleAdd(e, item.book_id)}
+                  >
                     <AiOutlinePlus className="w-4 h-4 text-black" />
                   </div>
                 </div>
               ) : (
-                <button className="bg-green-600 p-1 rounded-sm hover:bg-orange-600 transition-all">
+                <button
+                  className="bg-green-600 p-1 rounded-sm hover:bg-orange-600 transition-all"
+                  onClick={(e) => handleAdd(e, item.book_id)}
+                >
                   Add to Cart
                 </button>
               )}
