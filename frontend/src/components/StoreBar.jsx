@@ -19,6 +19,26 @@ export default function StoreBar({ setBooks }) {
   const [totalCost, setTotalCost] = useState(0);
   const [discountCost, setDiscountCost] = useState(0);
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    navigate(`/store/?search=${searchParams.get("search")}`);
+    if (searchParams.get("search")) {
+      const formData = new FormData();
+      formData.append("search", searchParams.get("search"));
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/filter`,
+        formData
+      );
+      setBooks(res.data.data);
+    } else {
+      axios
+        .post(`${import.meta.env.VITE_BACKEND_URL}/books/sorted`)
+        .then((res) => {
+          setBooks(res.data);
+        });
+    }
+  };
+
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_BACKEND_URL}/verify-user`).then((res) => {
       if (res.data.Status === "success") {
@@ -59,25 +79,6 @@ export default function StoreBar({ setBooks }) {
 
   const handleChange = (e) => {
     setSearchParams({ search: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    navigate(`/store/?search=${searchParams.get("search")}`);
-    if (searchParams.get("search")) {
-      const res = await axios.get(
-        `${
-          import.meta.env.VITE_BACKEND_URL
-        }/search-booksName/${searchParams.get("search")}`
-      );
-      setBooks(res.data.data);
-    } else {
-      axios
-        .post(`${import.meta.env.VITE_BACKEND_URL}/books/sorted`)
-        .then((res) => {
-          setBooks(res.data);
-        });
-    }
   };
 
   return (
