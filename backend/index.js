@@ -40,8 +40,10 @@ app.use("/",require("./routes/ratingInRange"));
 app.use("/",require("./routes/searchBookName"));
 app.use("/", require("./routes/books/fetchBookId"));
 app.use("/", require("./routes/books/getBooksId"));
+app.use("/" , require('./routes/orderHistory'))
 
-app.use("/purchaseBasket" , require("./routes/purchaseBasket"))
+app.use("/purchaseBasket" , require("./routes/purchaseBasket"));
+app.use("/addReviews" , require('./routes/addReviews'));
 
 app.listen(process.env.PORT, () => {
   console.log("Conected successfully to ", process.env.PORT);
