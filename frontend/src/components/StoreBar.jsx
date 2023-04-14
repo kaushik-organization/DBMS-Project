@@ -9,7 +9,12 @@ export default function StoreBar() {
   const [name, setName] = useState("");
   const [photo, setPhoto] = useState("");
   const [userId, setUserId] = useState("");
+  const [basketId, setBasketId] = useState("");
   axios.defaults.withCredentials = true;
+
+  const [basket, setBasket] = useState([]);
+  const [totalCost, setTotalCost] = useState(0);
+  const [discountCost, setDiscountCost] = useState(0);
 
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_BACKEND_URL}/verify-user`).then((res) => {
@@ -17,7 +22,19 @@ export default function StoreBar() {
         setUserId(res.data?.user_id);
         setAuth(true);
         setName(res.data?.name);
+        setBasketId(res.data.basket_id);
         setPhoto(res.data?.profile_pic);
+        axios
+          .get(
+            `${import.meta.env.VITE_BACKEND_URL}/booksInbasket/${
+              res.data.basket_id
+            }`
+          )
+          .then((res) => {
+            setBasket(res.data.data);
+            setTotalCost(res.data.totalCost);
+            setDiscountCost(res.data.discountCost);
+          });
       } else {
         setAuth(false);
         setMessage(res.data?.Error);
@@ -66,7 +83,12 @@ export default function StoreBar() {
               {name}
             </p>
             <Link to={`/account/${userId.toLowerCase()}/cart`}>
-              <AiOutlineShoppingCart className="w-8 h-8 text-blue-600" />
+              <div className="relative">
+                <AiOutlineShoppingCart className="w-8 h-8 text-blue-600" />
+                <div className="absolute w-3.5 h-3.5 bg-red-600/90 rounded-full top-0 right-0 text-xs flex items-center justify-center text-zinc-300">
+                  {basket?.length || 0}
+                </div>
+              </div>
             </Link>
             <div className="w-10 aspect-square rounded-full overflow-hidden flex justify-center items-center p-1 border border-neutral-500 cursor-pointer">
               <img src={photo} className="object-cover rounded-full" />

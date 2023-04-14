@@ -10,7 +10,6 @@ import PageNotFound from "./pageNotFound";
 
 export default function Account() {
   const { userId, options } = useParams();
-  console.log(typeof options);
   const [userid, setUserid] = useState("");
   const [basketId, setBasketId] = useState("");
   const [loading, setLoading] = useState(true);
@@ -19,7 +18,6 @@ export default function Account() {
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_BACKEND_URL}/verify-user`).then((res) => {
       if (res.data.Status === "success") {
-        console.log(res.data.user_id);
         setUserid(res.data.user_id);
         setBasketId(res.data.basket_id);
         setLoading(false);
@@ -45,9 +43,9 @@ export default function Account() {
   }
 
   return (
-    <div className="theme-font flex flex-col gap-2 w-full h-screen bg-zinc-900 theme-font text-white overflow-hidden">
+    <div className="theme-font flex flex-col gap-2 w-full h-screen bg-zinc-900 theme-font text-white">
       <StoreBar />
-      <div className="flex w-full flex-1 border-t border-t-zinc-600">
+      <div className="flex w-full flex-1 border-t border-t-zinc-600 overflow-hidden">
         <div className="w-[250px] shrink-0 border-r border-zinc-600">
           <ul className="flex flex-col">
             <Link to={`/account/${userId.toLowerCase()}/cart`}>
@@ -75,7 +73,7 @@ export default function Account() {
             </Link>
           </ul>
         </div>
-        <div className="">
+        <div className="w-full overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-[#222]">
           {
             {
               cart: <Cart userId={userid} basketId={basketId} />,
