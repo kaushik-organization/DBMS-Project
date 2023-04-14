@@ -67,7 +67,11 @@ export default function Account() {
               </li>
             </Link>
             <Link to={`/account/${userId.toLowerCase()}/profile`}>
-              <li className="py-4 px-6 border-b border-zinc-600 hover:bg-blue-600 transition-all delay-60">
+              <li
+                className={`py-4 px-6 border-b border-zinc-600 hover:bg-blue-600 transition-all delay-60 ${
+                  options === "profile" ? "bg-blue-600" : ""
+                }`}
+              >
                 Your Profile
               </li>
             </Link>

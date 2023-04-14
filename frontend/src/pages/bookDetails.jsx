@@ -167,7 +167,9 @@ export default function BookDetails() {
               )}
             </div>
           </div>
-          <h1 className="text-xl py-8">Recommended for you</h1>
+          <h1 className="text-xl py-2 my-6 font-semibold border-b w-fit pr-10">
+            Similar to this
+          </h1>
           <div className="flex flex-wrap gap-6 h-[360px] overflow-hidden">
             {recommendations.map((item, index) => (
               <Link
