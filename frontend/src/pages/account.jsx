@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import Cart from "../components/Cart";
+import Orders from "../components/Orders";
 import StoreBar from "../components/StoreBar";
 import PageNotFound from "./pageNotFound";
 
@@ -81,7 +82,7 @@ export default function Account() {
           {
             {
               cart: <Cart userId={userid} basketId={basketId} />,
-              orders: <div>Orders</div>,
+              orders: <Orders userId={userid} />,
               profile: <div>Profile</div>,
             }[options]
           }

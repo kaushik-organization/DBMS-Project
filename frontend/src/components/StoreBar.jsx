@@ -1,9 +1,10 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { AiOutlineSearch, AiOutlineShoppingCart } from "react-icons/ai";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 export default function StoreBar({ setBooks }) {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [auth, setAuth] = useState(false);
   const [message, setMessage] = useState("");
@@ -62,6 +63,7 @@ export default function StoreBar({ setBooks }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    navigate(`/store/?search=${searchParams.get("search")}`);
     if (searchParams.get("search")) {
       const res = await axios.get(
         `${
@@ -93,7 +95,7 @@ export default function StoreBar({ setBooks }) {
             className="flex-1 bg-transparent border border-gray-600 p-2 rounded-l-sm outline-none focus:border-gray-300"
             placeholder="Search..."
             onChange={handleChange}
-            value={searchParams.get("search")}
+            value={searchParams.get("search") || ""}
           />
           <button className="p-2 px-6 border border-blue-700 bg-blue-700 rounded-r-sm">
             <AiOutlineSearch className="w-6 h-6" />
