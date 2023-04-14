@@ -34,29 +34,21 @@ router.post("/", async (req, res) => {
     order_id = "ORDE" + num;
   }
 
-  let [status] = await conn.query(
-    `insert into Orders (order_id , user_id) values ('${order_id}' , '${user_id}')`
-  );
-  let total = 0;
-  for (let i = 0; i < books.length; i++) {
-    [status] = await conn.query(
-      `update Sales set quantity = quantity - ${books[i].quantity} , books_sold = books_sold + ${books[i].quantity} where book_id = '${books[i].book_id}'`
-    );
-    let [[{ price }]] = await conn.query(
-      `select price from Books where book_id = '${books[i].book_id}'`
-    );
-    [status] = await conn.query(
-      `insert into Orders_Books values ('${order_id}' , '${books[i].book_id}' , '${books[i].quantity}' , ${price})`
-    );
-    total += price * books[i].quantity;
-  }
+    let [status] = await conn.query(`insert into Orders (order_id , user_id) values ('${order_id}' , '${user_id}')`)
+    let total = 0;
+    for(let i=0 ; i<books.length ; i++){
+        [status] = await conn.query(`update Sales set quantity = quantity - ${books[i].quantity} , books_sold = books_sold + ${books[i].quantity} where book_id = '${books[i].book_id}'`);
+        let [[{price , discount}]] = await conn.query(`select price , discount from Books where book_id = '${books[i].book_id}'`);
+        [status] = await conn.query(`insert into Orders_Books values ('${order_id}' , '${books[i].book_id}' , '${books[i].quantity}' , ${price*(100 - discount)/100})`);
+        total += price*(100 - discount)/100 * books[i].quantity;
+    }
 
   [status] = await conn.query(
     `delete from Basket_Books where basket_id = '${basket_id}'`
   );
 
-  conn.end();
-  res.status(200).send({ total: total });
-});
+    conn.end();
+    res.status(200).send({"total" : total , "order_id" : order_id});
+})
 
 module.exports = router;
