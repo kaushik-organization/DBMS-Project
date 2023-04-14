@@ -2,20 +2,33 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import StoreBar from "../components/StoreBar";
 
 export default function Store() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [books, setBooks] = useState([]);
   const [basketId, setBasketId] = useState(null);
   const [cart, setCart] = useState([]);
   const [userId, setUserId] = useState("");
   useEffect(() => {
-    axios
-      .post(`${import.meta.env.VITE_BACKEND_URL}/books/sorted`)
-      .then((res) => {
-        setBooks(res.data);
-      });
+    if (searchParams.get("search")) {
+      axios
+        .get(
+          `${
+            import.meta.env.VITE_BACKEND_URL
+          }/search-booksName/${searchParams.get("search")}`
+        )
+        .then((res) => {
+          setBooks(res.data.data);
+        });
+    } else {
+      axios
+        .post(`${import.meta.env.VITE_BACKEND_URL}/books/sorted`)
+        .then((res) => {
+          setBooks(res.data);
+        });
+    }
   }, []);
 
   const fetchCart = async () => {
@@ -82,11 +95,11 @@ export default function Store() {
 
   return (
     <div className="flex flex-col gap-2 w-full h-screen bg-zinc-900 theme-font text-white">
-      <StoreBar />
+      <StoreBar setBooks={setBooks} />
       <div className="w-full flex-1 flex overflow-hidden">
         <div className="w-[250px] shrink-0"></div>
         <div className="flex-1 overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-[#222] p-4 flex flex-wrap gap-6">
-          {[...books, ...books, ...books, ...books].map((item, index) => (
+          {[...books].map((item, index) => (
             <Link
               key={index}
               to={`/book/${item.book_id}`}

@@ -1,15 +1,17 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { AiOutlineSearch, AiOutlineShoppingCart } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
-export default function StoreBar() {
+export default function StoreBar({ setBooks }) {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [auth, setAuth] = useState(false);
   const [message, setMessage] = useState("");
   const [name, setName] = useState("");
   const [photo, setPhoto] = useState("");
   const [userId, setUserId] = useState("");
   const [basketId, setBasketId] = useState("");
+  const [search, setSearch] = useState("");
   axios.defaults.withCredentials = true;
 
   const [basket, setBasket] = useState([]);
@@ -54,6 +56,28 @@ export default function StoreBar() {
     }
   };
 
+  const handleChange = (e) => {
+    setSearchParams({ search: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (searchParams.get("search")) {
+      const res = await axios.get(
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }/search-booksName/${searchParams.get("search")}`
+      );
+      setBooks(res.data.data);
+    } else {
+      axios
+        .post(`${import.meta.env.VITE_BACKEND_URL}/books/sorted`)
+        .then((res) => {
+          setBooks(res.data);
+        });
+    }
+  };
+
   return (
     <div className="w-full py-3 px-4 flex justify-between gap-2 items-center">
       <Link to={"/store"}>
@@ -63,14 +87,18 @@ export default function StoreBar() {
         />
       </Link>
       <div className="flex-1 flex mx-20 items-center">
-        <input
-          type={"text"}
-          className="flex-1 bg-transparent border border-gray-600 p-2 rounded-l-sm outline-none focus:border-gray-300"
-          placeholder="Search..."
-        />
-        <button className="p-2 px-6 border border-blue-700 bg-blue-700 rounded-r-sm">
-          <AiOutlineSearch className="w-6 h-6" />
-        </button>
+        <form className="flex w-full" onSubmit={handleSubmit}>
+          <input
+            type={"text"}
+            className="flex-1 bg-transparent border border-gray-600 p-2 rounded-l-sm outline-none focus:border-gray-300"
+            placeholder="Search..."
+            onChange={handleChange}
+            value={searchParams.get("search")}
+          />
+          <button className="p-2 px-6 border border-blue-700 bg-blue-700 rounded-r-sm">
+            <AiOutlineSearch className="w-6 h-6" />
+          </button>
+        </form>
       </div>
       <div className="flex items-center gap-3">
         {auth ? (
@@ -90,9 +118,11 @@ export default function StoreBar() {
                 </div>
               </div>
             </Link>
-            <div className="w-10 aspect-square rounded-full overflow-hidden flex justify-center items-center p-1 border border-neutral-500 cursor-pointer">
-              <img src={photo} className="object-cover rounded-full" />
-            </div>
+            <Link to={`/account/${userId.toLowerCase()}/profile`}>
+              <div className="w-10 aspect-square rounded-full overflow-hidden flex justify-center items-center p-1 border border-neutral-500 cursor-pointer">
+                <img src={photo} className="object-cover rounded-full" />
+              </div>
+            </Link>
           </>
         ) : (
           <>
