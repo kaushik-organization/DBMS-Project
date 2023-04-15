@@ -41,7 +41,7 @@ app.use("/",require("./routes/searchBookName"));
 app.use("/", require("./routes/books/fetchBookId"));
 app.use("/", require("./routes/books/getBooksId"));
 app.use("/" , require('./routes/orderHistory'))
-app.use("/addReviews" , require('./routes/addReviews'));
+app.use("/" , require('./routes/addReviews'));
 app.use("/purchaseBasket" , require("./routes/purchaseBasket"))
 app.use("/",require("./routes/sortwithDiscount"));
 
