@@ -1,9 +1,10 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { AiOutlineSearch, AiOutlineShoppingCart } from "react-icons/ai";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 export default function StoreBar({ setBooks }) {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [auth, setAuth] = useState(false);
   const [message, setMessage] = useState("");
@@ -17,6 +18,26 @@ export default function StoreBar({ setBooks }) {
   const [basket, setBasket] = useState([]);
   const [totalCost, setTotalCost] = useState(0);
   const [discountCost, setDiscountCost] = useState(0);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    navigate(`/store/?search=${searchParams.get("search")}`);
+    if (searchParams.get("search")) {
+      const formData = new FormData();
+      formData.append("search", searchParams.get("search"));
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/filter`,
+        formData
+      );
+      setBooks(res.data.data);
+    } else {
+      axios
+        .post(`${import.meta.env.VITE_BACKEND_URL}/books/sorted`)
+        .then((res) => {
+          setBooks(res.data);
+        });
+    }
+  };
 
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_BACKEND_URL}/verify-user`).then((res) => {
@@ -60,24 +81,6 @@ export default function StoreBar({ setBooks }) {
     setSearchParams({ search: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (searchParams.get("search")) {
-      const res = await axios.get(
-        `${
-          import.meta.env.VITE_BACKEND_URL
-        }/search-booksName/${searchParams.get("search")}`
-      );
-      setBooks(res.data.data);
-    } else {
-      axios
-        .post(`${import.meta.env.VITE_BACKEND_URL}/books/sorted`)
-        .then((res) => {
-          setBooks(res.data);
-        });
-    }
-  };
-
   return (
     <div className="w-full py-3 px-4 flex justify-between gap-2 items-center">
       <Link to={"/store"}>
@@ -93,7 +96,7 @@ export default function StoreBar({ setBooks }) {
             className="flex-1 bg-transparent border border-gray-600 p-2 rounded-l-sm outline-none focus:border-gray-300"
             placeholder="Search..."
             onChange={handleChange}
-            value={searchParams.get("search")}
+            value={searchParams.get("search") || ""}
           />
           <button className="p-2 px-6 border border-blue-700 bg-blue-700 rounded-r-sm">
             <AiOutlineSearch className="w-6 h-6" />
