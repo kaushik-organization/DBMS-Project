@@ -14,6 +14,7 @@ export default function BookDetails() {
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [basketId, setBasketId] = useState(null);
+  const [userId, setUserId] = useState("");
   const [cart, setCart] = useState([]);
 
   useEffect(() => {
@@ -26,9 +27,10 @@ export default function BookDetails() {
       });
   }, [bookId]);
 
-  useEffect(() => {
+  const fetchCart = async () => {
     axios.get(`${import.meta.env.VITE_BACKEND_URL}/verify-user`).then((res) => {
       if (res.data.Status === "success") {
+        setUserId(res.data.user_id);
         setBasketId(res.data.basket_id);
         axios
           .get(
@@ -37,11 +39,12 @@ export default function BookDetails() {
             }`
           )
           .then((res) => setCart(res.data?.data));
-      } else {
-        setAuth(false);
-        setMessage(res.data.Error);
       }
     });
+  };
+
+  useEffect(() => {
+    fetchCart();
   }, []);
 
   axios.defaults.withCredentials = true;
@@ -67,6 +70,48 @@ export default function BookDetails() {
         });
     }
   }, [details, bookId]);
+
+  const handleAdd = async (e, book_id) => {
+    try {
+      e.stopPropagation();
+      e.preventDefault();
+      const formData = new FormData();
+      formData.append("book_id", book_id);
+      formData.append("user_id", userId);
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/AddToCart`,
+        formData
+      );
+      if (res.status === 209) {
+        alert("Sorry! The book is not currently available");
+      }
+      if (res.status === 210) {
+        alert("Currently unavailable");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    fetchCart();
+  };
+
+  const handleRemove = async (e, book_id) => {
+    try {
+      e.stopPropagation();
+      e.preventDefault();
+      const formData = new FormData();
+      formData.append("book_id", book_id);
+      formData.append("user_id", userId);
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/removeToCart`,
+        formData
+      );
+    } catch (err) {
+      console.log(err);
+    }
+    axios
+      .get(`${import.meta.env.VITE_BACKEND_URL}/booksInbasket/${basketId}`)
+      .then((res) => setCart(res.data?.data));
+  };
 
   return (
     <div className="theme-font flex flex-col gap-2 w-full h-screen bg-zinc-900 theme-font text-white overflow-hidden">
@@ -94,26 +139,37 @@ export default function BookDetails() {
                 <span className="text-neutral-400">{details?.rating}/5.0</span>
               </div>
               {cart?.filter((e) => e.book_id === details.book_id).length > 0 ? (
-                <div className="flex items-center">
-                  <div className="p-2 w-[50px] bg-blue-600 flex justify-center rounded-l-sm">
+                <div className="flex items-center cursor-pointer">
+                  <div
+                    className="p-2 w-[50px] bg-blue-600 flex justify-center rounded-l-sm"
+                    onClick={(e) => handleRemove(e, item.book_id)}
+                  >
                     <AiOutlineMinus className="w-6 h-6 text-black" />
                   </div>
-                  <button className="bg-white px-10 p-2 min-w-[250px] w-fit text-black">
+                  <div className="text-center bg-white px-10 p-2 min-w-[250px] w-fit text-black">
                     Quantity{" "}
                     {cart.filter((e) => e.book_id === details.book_id)[0].count}
-                  </button>
-                  <div className="p-2 w-[50px] bg-blue-600 flex justify-center rounded-r-sm">
+                  </div>
+                  <div
+                    className="p-2 w-[50px] bg-blue-600 flex justify-center rounded-r-sm"
+                    onClick={(e) => handleAdd(e, item.book_id)}
+                  >
                     <AiOutlinePlus className="w-6 h-6 text-black" />
                   </div>
                 </div>
               ) : (
-                <button className="bg-blue-600 px-10 p-2 min-w-[350px] w-fit">
+                <button
+                  className="bg-blue-600 px-10 p-2 min-w-[350px] w-fit"
+                  onClick={(e) => handleAdd(e, item.book_id)}
+                >
                   Add to Cart
                 </button>
               )}
             </div>
           </div>
-          <h1 className="text-xl py-8">Recommended for you</h1>
+          <h1 className="text-xl py-2 my-6 font-semibold border-b w-fit pr-10">
+            Similar to this
+          </h1>
           <div className="flex flex-wrap gap-6 h-[360px] overflow-hidden">
             {recommendations.map((item, index) => (
               <Link
@@ -137,19 +193,28 @@ export default function BookDetails() {
                 </div>
                 {cart?.filter((e) => e.book_id === item.book_id).length > 0 ? (
                   <div className="flex items-center h-8">
-                    <div className="p-1 px-1.5 h-full items-center bg-blue-600 flex justify-center rounded-l-sm">
+                    <div
+                      className="p-1 px-1.5 h-full items-center bg-blue-600 flex justify-center rounded-l-sm"
+                      onClick={(e) => handleRemove(e, item.book_id)}
+                    >
                       <AiOutlineMinus className="w-4 h-4 text-black" />
                     </div>
-                    <button className="bg-white p-1 flex-1 w-fit text-black">
+                    <div className="text-center bg-white p-1 flex-1 w-fit text-black">
                       Quantity{" "}
                       {cart.filter((e) => e.book_id === item.book_id)[0].count}
-                    </button>
-                    <div className="p-1 px-1.5 h-full items-center bg-blue-600 flex justify-center rounded-r-sm">
+                    </div>
+                    <div
+                      className="p-1 px-1.5 h-full items-center bg-blue-600 flex justify-center rounded-r-sm"
+                      onClick={(e) => handleAdd(e, item.book_id)}
+                    >
                       <AiOutlinePlus className="w-4 h-4 text-black" />
                     </div>
                   </div>
                 ) : (
-                  <button className="bg-green-600 p-1 rounded-sm hover:bg-orange-600 transition-all">
+                  <button
+                    className="bg-green-600 p-1 rounded-sm hover:bg-orange-600 transition-all"
+                    onClick={(e) => handleAdd(e, item.book_id)}
+                  >
                     Add to Cart
                   </button>
                 )}
