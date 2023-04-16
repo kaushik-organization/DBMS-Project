@@ -7,15 +7,25 @@ import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
 import { ClipLoader } from "react-spinners";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
+import { userState } from "../../atoms/user";
+import {
+  basketCost,
+  basketDiscountCost,
+  basketState,
+} from "../../atoms/basket";
+import { useRecoilState } from "recoil";
 
 export default function BookDetails() {
   const { bookId } = useParams();
   const [details, setDetails] = useState({});
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [basketId, setBasketId] = useState(null);
-  const [userId, setUserId] = useState("");
-  const [cart, setCart] = useState([]);
+  const [loading1, setLoading1] = useState(false);
+
+  const [user, setUser] = useRecoilState(userState);
+  const [basket, setBasket] = useRecoilState(basketState);
+  const [totalCost, setTotalCost] = useRecoilState(basketCost);
+  const [discountCost, setDiscountCost] = useRecoilState(basketDiscountCost);
 
   useEffect(() => {
     setLoading(true);
@@ -30,15 +40,27 @@ export default function BookDetails() {
   const fetchCart = async () => {
     axios.get(`${import.meta.env.VITE_BACKEND_URL}/verify-user`).then((res) => {
       if (res.data.Status === "success") {
-        setUserId(res.data.user_id);
-        setBasketId(res.data.basket_id);
+        const data = {
+          user_id: res.data.user_id,
+          name: res.data.name,
+          profile_pic: res.data.profile_pic,
+          basket_id: res.data.basket_id,
+          auth: true,
+        };
+        setUser(data);
         axios
           .get(
             `${import.meta.env.VITE_BACKEND_URL}/booksInbasket/${
               res.data.basket_id
             }`
           )
-          .then((res) => setCart(res.data?.data));
+          .then((res) => {
+            setBasket(res.data?.data);
+            setTotalCost(res.data.totalCost);
+            setDiscountCost(res.data.discountCost);
+            setLoading(false);
+            setLoading1(false);
+          });
       }
     });
   };
@@ -72,12 +94,19 @@ export default function BookDetails() {
   }, [details, bookId]);
 
   const handleAdd = async (e, book_id) => {
+    setLoading(true);
+    e.stopPropagation();
+    e.preventDefault();
+    if (!user.auth) {
+      const ans = confirm("You are not signed in. Do you want to?");
+      if (ans) navigate("/auth0/login");
+      setLoading(false);
+      return;
+    }
     try {
-      e.stopPropagation();
-      e.preventDefault();
       const formData = new FormData();
       formData.append("book_id", book_id);
-      formData.append("user_id", userId);
+      formData.append("user_id", user?.user_id);
       const res = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/AddToCart`,
         formData
@@ -92,15 +121,17 @@ export default function BookDetails() {
       console.log(err);
     }
     fetchCart();
+    setLoading1(false);
   };
 
   const handleRemove = async (e, book_id) => {
+    setLoading(true);
     try {
       e.stopPropagation();
       e.preventDefault();
       const formData = new FormData();
       formData.append("book_id", book_id);
-      formData.append("user_id", userId);
+      formData.append("user_id", user?.user_id);
       const res = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/removeToCart`,
         formData
@@ -108,9 +139,8 @@ export default function BookDetails() {
     } catch (err) {
       console.log(err);
     }
-    axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/booksInbasket/${basketId}`)
-      .then((res) => setCart(res.data?.data));
+    fetchCart();
+    setLoading1(false);
   };
 
   return (
@@ -125,10 +155,19 @@ export default function BookDetails() {
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="flex-1 flex flex-col gap-5">
+            <div className="flex-1 flex flex-col gap-5 w-full">
               <h1 className="text-5xl font-extrabold">{details?.title}</h1>
-              <div className="text-neutral-300 flex-1">
+              <p className="text-neutral-300 line-clamp-[6]">
                 {details?.description}
+              </p>
+              <div className="font-semibold flex-1 text-emerald-400 text-3xl flex gap-3 items-end">
+                <p>
+                  Rs. {details.price - (details.price * details.discount) / 100}
+                </p>
+                <s className="text-red-600 text-xl">Rs. {details.price}</s>
+                <p className="text-gray-500 text-lg">
+                  {details.discount}% discount
+                </p>
               </div>
               <div className="flex gap-2 items-center">
                 <Rating
@@ -138,21 +177,25 @@ export default function BookDetails() {
                 />
                 <span className="text-neutral-400">{details?.rating}/5.0</span>
               </div>
-              {cart?.filter((e) => e.book_id === details.book_id).length > 0 ? (
+              {basket?.filter((e) => e.book_id === details.book_id).length >
+              0 ? (
                 <div className="flex items-center cursor-pointer">
                   <div
                     className="p-2 w-[50px] bg-blue-600 flex justify-center rounded-l-sm"
-                    onClick={(e) => handleRemove(e, item.book_id)}
+                    onClick={(e) => handleRemove(e, details.book_id)}
                   >
                     <AiOutlineMinus className="w-6 h-6 text-black" />
                   </div>
                   <div className="text-center bg-white px-10 p-2 min-w-[250px] w-fit text-black">
                     Quantity{" "}
-                    {cart.filter((e) => e.book_id === details.book_id)[0].count}
+                    {
+                      basket.filter((e) => e.book_id === details.book_id)[0]
+                        .count
+                    }
                   </div>
                   <div
                     className="p-2 w-[50px] bg-blue-600 flex justify-center rounded-r-sm"
-                    onClick={(e) => handleAdd(e, item.book_id)}
+                    onClick={(e) => handleAdd(e, details.book_id)}
                   >
                     <AiOutlinePlus className="w-6 h-6 text-black" />
                   </div>
@@ -160,7 +203,7 @@ export default function BookDetails() {
               ) : (
                 <button
                   className="bg-blue-600 px-10 p-2 min-w-[350px] w-fit"
-                  onClick={(e) => handleAdd(e, item.book_id)}
+                  onClick={(e) => handleAdd(e, details.book_id)}
                 >
                   Add to Cart
                 </button>
@@ -191,7 +234,8 @@ export default function BookDetails() {
                   <p>Rs. {item.price - (item.price * item.discount) / 100}</p>
                   <s className="text-red-600">Rs. {item.price}</s>
                 </div>
-                {cart?.filter((e) => e.book_id === item.book_id).length > 0 ? (
+                {basket?.filter((e) => e.book_id === item.book_id).length >
+                0 ? (
                   <div className="flex items-center h-8">
                     <div
                       className="p-1 px-1.5 h-full items-center bg-blue-600 flex justify-center rounded-l-sm"
@@ -201,7 +245,10 @@ export default function BookDetails() {
                     </div>
                     <div className="text-center bg-white p-1 flex-1 w-fit text-black">
                       Quantity{" "}
-                      {cart.filter((e) => e.book_id === item.book_id)[0].count}
+                      {
+                        basket.filter((e) => e.book_id === item.book_id)[0]
+                          .count
+                      }
                     </div>
                     <div
                       className="p-1 px-1.5 h-full items-center bg-blue-600 flex justify-center rounded-r-sm"
@@ -221,7 +268,6 @@ export default function BookDetails() {
               </Link>
             ))}
           </div>
-          <div className="h-32" />
         </div>
       ) : (
         <ClipLoader className="w-6 h-6 m-auto" color="white" />

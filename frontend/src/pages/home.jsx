@@ -9,24 +9,45 @@ import {
   AiOutlineTwitter,
 } from "react-icons/ai";
 import { FaStore } from "react-icons/fa";
-import Books from "../components/Books-home";
+import { useRecoilState } from "recoil";
+import { userState } from "../../atoms/user";
+import BooksHome from "../components/BooksHome";
+import {
+  basketCost,
+  basketDiscountCost,
+  basketState,
+} from "../../atoms/basket";
 
 export default function Home() {
-  const [auth, setAuth] = useState(false);
-  const [message, setMessage] = useState("");
-  const [name, setName] = useState("");
-  const [photo, setPhoto] = useState("");
+  const [user, setUser] = useRecoilState(userState);
+  const [basket, setBasket] = useRecoilState(basketState);
+  const [totalCost, setTotalCost] = useRecoilState(basketCost);
+  const [discountCost, setDiscountCost] = useRecoilState(basketDiscountCost);
+
   axios.defaults.withCredentials = true;
 
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_BACKEND_URL}/verify-user`).then((res) => {
       if (res.data.Status === "success") {
-        setAuth(true);
-        setName(res.data.name);
-        setPhoto(res.data.profile_pic);
-      } else {
-        setAuth(false);
-        setMessage(res.data.Error);
+        const data = {
+          user_id: res.data.user_id,
+          name: res.data.name,
+          profile_pic: res.data.profile_pic,
+          basket_id: res.data.basket_id,
+          auth: true,
+        };
+        setUser(data);
+        axios
+          .get(
+            `${import.meta.env.VITE_BACKEND_URL}/booksInbasket/${
+              res.data.basket_id
+            }`
+          )
+          .then((res) => {
+            setBasket(res.data?.data);
+            setTotalCost(res.data.totalCost);
+            setDiscountCost(res.data.discountCost);
+          });
       }
     });
   }, []);
@@ -73,26 +94,40 @@ export default function Home() {
             <li>
               <AiFillAppstore className="w-8 h-8" />
             </li>
-            <li>Store</li>
+            <Link to={"/store"}>
+              <li>Store</li>
+            </Link>
             <li>Contact</li>
             <li>
               <AiOutlineTwitter className="w-8 h-8" />
             </li>
           </ul>
           <div className="flex items-center gap-3">
-            {auth ? (
+            {user?.auth ? (
               <>
                 <p className="text-center leading-3">
                   <span className="text-neutral-500 text-sm">
                     Good {greeting()},{" "}
                   </span>
                   <br />
-                  {name}
+                  {user?.name}
                 </p>
-                <AiOutlineShoppingCart className="w-8 h-8 text-blue-600" />
-                <div className="w-10 aspect-square rounded-full overflow-hidden flex justify-center items-center p-1 border border-neutral-500 cursor-pointer">
-                  <img src={photo} className="object-cover rounded-full" />
-                </div>
+                <Link to={`/account/${user?.user_id.toLowerCase()}/cart`}>
+                  <div className="relative">
+                    <AiOutlineShoppingCart className="w-8 h-8 text-blue-600" />
+                    <div className="absolute w-3.5 h-3.5 bg-red-600/90 rounded-full top-0 right-0 text-xs flex items-center justify-center text-zinc-300">
+                      {basket?.length || 0}
+                    </div>
+                  </div>
+                </Link>
+                <Link to={`/account/${user?.user_id.toLowerCase()}/profile`}>
+                  <div className="w-10 aspect-square rounded-full flex justify-center items-center p-[2px] border border-neutral-500 cursor-pointer">
+                    <img
+                      src={user?.profile_pic}
+                      className="object-cover w-full h-full rounded-full shrink-0"
+                    />
+                  </div>
+                </Link>
               </>
             ) : (
               <>
@@ -131,7 +166,7 @@ export default function Home() {
         <h1 className="text-6xl mt-">Bestsellers</h1>
       </div>
       <div>
-        <Books />
+        <BooksHome />
       </div>
     </div>
   );
