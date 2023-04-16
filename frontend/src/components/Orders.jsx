@@ -2,7 +2,9 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { AiOutlineArrowRight } from "react-icons/ai";
-import { json, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { Rating } from "@smastrom/react-rating";
+import "@smastrom/react-rating/style.css";
 
 export default function Orders({ userId }) {
   const [orders, setOrders] = useState([]);
@@ -62,19 +64,26 @@ export default function Orders({ userId }) {
         orders.map((item, index) => (
           <>
             {visible && !visible[index] ? (
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-col gap-2">
                 {details[index] &&
-                  details[index].map((item, index) => (
-                    <Link to={`/book/${item.book_id}`} key={item.image}>
-                      <div className="border border-zinc-700 flex gap-2 rounded-md p-3">
+                  [...details[index], ...details[index]].map((item, index) => (
+                    <div
+                      key={item.image}
+                      className="border border-zinc-700 flex flex-col gap-2 rounded-md p-3"
+                    >
+                      <div className="flex w-full gap-3">
                         <div className="w-20 shrink-0">
-                          <img
-                            src={item.image}
-                            className="w-full h-full object-contain"
-                          />
+                          <Link to={`/book/${item.book_id}`}>
+                            <img
+                              src={item.image}
+                              className="w-full h-full object-contain"
+                            />
+                          </Link>
                         </div>
                         <div className="flex flex-col">
-                          <p className="text-lg mr-10">{item.title}</p>
+                          <Link to={`/book/${item.book_id}`}>
+                            <p className="text-lg mr-10">{item.title}</p>
+                          </Link>
                           <div className="text-zinc-500 line-clamp-3">
                             {item.description}
                           </div>
@@ -86,7 +95,18 @@ export default function Orders({ userId }) {
                           </div>
                         </div>
                       </div>
-                    </Link>
+                      <div className="">
+                        <textarea
+                          className="w-full resize-none scrollbar-thin bg-transparent p-2 rounded-sm focus:border-zinc-500 outline-none border border-zinc-700"
+                          rows={3}
+                          placeholder="Write your review..."
+                        />
+                        <Rating style={{ maxWidth: 150 }} value={2} readOnly />
+                        <button className="mt-2 px-6 py-1 bg-blue-600 rounded-sm">
+                          Submit your review
+                        </button>
+                      </div>
+                    </div>
                   ))}
               </div>
             ) : (
