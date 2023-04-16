@@ -45,6 +45,8 @@ app.use("/addReviews" , require('./routes/addReviews'));
 app.use("/purchaseBasket" , require("./routes/purchaseBasket"))
 app.use("/",require("./routes/sortwithDiscount"));
 app.use("/",require("./routes/clearBasketByUserId"));
+app.use("/",require("./routes/getReviewsBookId"))
+app.use("/",require("./routes/getReviewsUserId"))
 app.listen(process.env.PORT, () => {
   console.log("Conected successfully to ", process.env.PORT);
 });
