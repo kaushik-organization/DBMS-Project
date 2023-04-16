@@ -27,6 +27,8 @@ export default function BookDetails() {
   const [totalCost, setTotalCost] = useRecoilState(basketCost);
   const [discountCost, setDiscountCost] = useRecoilState(basketDiscountCost);
 
+  const [reviews, setReviews] = useState([]);
+
   useEffect(() => {
     setLoading(true);
     axios
@@ -61,6 +63,10 @@ export default function BookDetails() {
             setLoading(false);
             setLoading1(false);
           });
+
+        axios
+          .get(`${import.meta.env.VITE_BACKEND_URL}/reviews-BookId/${bookId}`)
+          .then((res) => setReviews(res.data?.data));
       }
     });
   };
@@ -268,6 +274,10 @@ export default function BookDetails() {
               </Link>
             ))}
           </div>
+          <h1 className="text-xl py-2 my-6 font-semibold border-b w-fit pr-10">
+            Reviews
+          </h1>
+          <div className=""></div>
         </div>
       ) : (
         <ClipLoader className="w-6 h-6 m-auto" color="white" />
