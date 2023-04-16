@@ -4,11 +4,19 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import { useRecoilSnapshot, useRecoilState } from "recoil";
+import {
+  basketCost,
+  basketDiscountCost,
+  basketState,
+} from "../../atoms/basket";
+import { userState } from "../../atoms/user";
 
 export default function Cart({ userId, basketId }) {
-  const [basket, setBasket] = useState([]);
-  const [totalCost, setTotalCost] = useState(0);
-  const [discountCost, setDiscountCost] = useState(0);
+  const [user, setUser] = useRecoilState(userState);
+  const [basket, setBasket] = useRecoilState(basketState);
+  const [totalCost, setTotalCost] = useRecoilState(basketCost);
+  const [discountCost, setDiscountCost] = useRecoilState(basketDiscountCost);
 
   const fetchData = async () => {
     const res = await axios.get(
@@ -28,7 +36,7 @@ export default function Cart({ userId, basketId }) {
       e.preventDefault();
       const formData = new FormData();
       formData.append("book_id", book_id);
-      formData.append("user_id", userId);
+      formData.append("user_id", user?.user_id);
       const res = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/AddToCart`,
         formData
@@ -74,6 +82,18 @@ export default function Cart({ userId, basketId }) {
     }
 
     alert("Purchase Successful");
+    fetchData();
+  };
+
+  const handleClear = async () => {
+    const formData = new FormData();
+    formData.append("user_id", user?.user_id);
+    const res = await axios.post(
+      `${import.meta.env.VITE_BACKEND_URL}/clearBasket`,
+      formData
+    );
+    alert("Basket cleared successfully!");
+    fetchData();
   };
 
   return (
@@ -113,7 +133,10 @@ export default function Cart({ userId, basketId }) {
               >
                 Purchase Now
               </button>
-              <button className="bg-zinc-300 text-black px-10 py-2 rounded-sm">
+              <button
+                className="bg-zinc-300 text-black px-10 py-2 rounded-sm"
+                onClick={handleClear}
+              >
                 Clear
               </button>
             </div>

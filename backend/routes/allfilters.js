@@ -33,9 +33,8 @@ router.post("/filter", async (req, res) => {
       query = `select *, (price - (discount*price/100)) as discount_price from Books where (title like '%${search}%' or description like '%${search}%') and ((price - (discount*price/100)) >= ${priceRange[0]} and (price - (discount*price/100)) <= ${priceRange[1]}) and (rating >= ${ratingRange[0]} and rating <= ${ratingRange[1]})`;
     }
 
-    console.log(query);
-
     const [rows] = await conn.query(query);
+
     if (!rows[0]) {
       return res.status(204).json({ message: `No books found` });
     }

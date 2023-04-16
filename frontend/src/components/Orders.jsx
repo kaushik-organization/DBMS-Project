@@ -75,7 +75,7 @@ export default function Orders({ userId }) {
                         </div>
                         <div className="flex flex-col">
                           <p className="text-lg mr-10">{item.title}</p>
-                          <div className="text-zinc-500 flex-1">
+                          <div className="text-zinc-500 line-clamp-3">
                             {item.description}
                           </div>
                           <div className="text-lg text-green-500">
