@@ -1,31 +1,58 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { AiOutlineSearch, AiOutlineShoppingCart } from "react-icons/ai";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useRecoilSnapshot, useRecoilState } from "recoil";
+import {
+  basketCost,
+  basketDiscountCost,
+  basketState,
+} from "../../atoms/basket";
+import { userState } from "../../atoms/user";
 
 export default function StoreBar({ setBooks }) {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [auth, setAuth] = useState(false);
-  const [message, setMessage] = useState("");
-  const [name, setName] = useState("");
-  const [photo, setPhoto] = useState("");
-  const [userId, setUserId] = useState("");
-  const [basketId, setBasketId] = useState("");
   const [search, setSearch] = useState("");
+
+  const [user, setUser] = useRecoilState(userState);
+  const [basket, setBasket] = useRecoilState(basketState);
+  const [totalCost, setTotalCost] = useRecoilState(basketCost);
+  const [discountCost, setDiscountCost] = useRecoilState(basketDiscountCost);
+
   axios.defaults.withCredentials = true;
 
-  const [basket, setBasket] = useState([]);
-  const [totalCost, setTotalCost] = useState(0);
-  const [discountCost, setDiscountCost] = useState(0);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    navigate(`/store/?search=${searchParams.get("search")}`);
+    if (searchParams.get("search")) {
+      const formData = new FormData();
+      formData.append("search", searchParams.get("search"));
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/filter`,
+        formData
+      );
+      setBooks(res.data.data);
+    } else {
+      axios
+        .post(`${import.meta.env.VITE_BACKEND_URL}/books/sorted`)
+        .then((res) => {
+          setBooks(res.data);
+        });
+    }
+  };
 
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_BACKEND_URL}/verify-user`).then((res) => {
       if (res.data.Status === "success") {
-        setUserId(res.data?.user_id);
-        setAuth(true);
-        setName(res.data?.name);
-        setBasketId(res.data.basket_id);
-        setPhoto(res.data?.profile_pic);
+        const data = {
+          user_id: res.data.user_id,
+          name: res.data.name,
+          profile_pic: res.data.profile_pic,
+          basket_id: res.data.basket_id,
+          auth: true,
+        };
+        setUser(data);
         axios
           .get(
             `${import.meta.env.VITE_BACKEND_URL}/booksInbasket/${
@@ -37,9 +64,6 @@ export default function StoreBar({ setBooks }) {
             setTotalCost(res.data.totalCost);
             setDiscountCost(res.data.discountCost);
           });
-      } else {
-        setAuth(false);
-        setMessage(res.data?.Error);
       }
     });
   }, []);
@@ -60,24 +84,6 @@ export default function StoreBar({ setBooks }) {
     setSearchParams({ search: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (searchParams.get("search")) {
-      const res = await axios.get(
-        `${
-          import.meta.env.VITE_BACKEND_URL
-        }/search-booksName/${searchParams.get("search")}`
-      );
-      setBooks(res.data.data);
-    } else {
-      axios
-        .post(`${import.meta.env.VITE_BACKEND_URL}/books/sorted`)
-        .then((res) => {
-          setBooks(res.data);
-        });
-    }
-  };
-
   return (
     <div className="w-full py-3 px-4 flex justify-between gap-2 items-center">
       <Link to={"/store"}>
@@ -93,7 +99,7 @@ export default function StoreBar({ setBooks }) {
             className="flex-1 bg-transparent border border-gray-600 p-2 rounded-l-sm outline-none focus:border-gray-300"
             placeholder="Search..."
             onChange={handleChange}
-            value={searchParams.get("search")}
+            value={searchParams.get("search") || ""}
           />
           <button className="p-2 px-6 border border-blue-700 bg-blue-700 rounded-r-sm">
             <AiOutlineSearch className="w-6 h-6" />
@@ -101,16 +107,16 @@ export default function StoreBar({ setBooks }) {
         </form>
       </div>
       <div className="flex items-center gap-3">
-        {auth ? (
+        {user?.auth ? (
           <>
             <p className="text-center leading-3">
               <span className="text-neutral-500 text-sm">
                 Good {greeting()},{" "}
               </span>
               <br />
-              {name}
+              {user?.name}
             </p>
-            <Link to={`/account/${userId.toLowerCase()}/cart`}>
+            <Link to={`/account/${user?.user_id.toLowerCase()}/cart`}>
               <div className="relative">
                 <AiOutlineShoppingCart className="w-8 h-8 text-blue-600" />
                 <div className="absolute w-3.5 h-3.5 bg-red-600/90 rounded-full top-0 right-0 text-xs flex items-center justify-center text-zinc-300">
@@ -118,9 +124,12 @@ export default function StoreBar({ setBooks }) {
                 </div>
               </div>
             </Link>
-            <Link to={`/account/${userId.toLowerCase()}/profile`}>
-              <div className="w-10 aspect-square rounded-full overflow-hidden flex justify-center items-center p-1 border border-neutral-500 cursor-pointer">
-                <img src={photo} className="object-cover rounded-full" />
+            <Link to={`/account/${user?.user_id.toLowerCase()}/profile`}>
+              <div className="w-10 aspect-square rounded-full overflow-hidden flex justify-center items-center p-[2px] border border-neutral-500 cursor-pointer">
+                <img
+                  src={user.profile_pic}
+                  className="object-cover w-full h-full rounded-full"
+                />
               </div>
             </Link>
           </>

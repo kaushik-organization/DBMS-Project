@@ -2,9 +2,18 @@ import axios from "axios";
 import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { FaExternalLinkAlt } from "react-icons/fa";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
+import { useResetRecoilState } from "recoil";
+import {
+  basketCost,
+  basketDiscountCost,
+  basketState,
+} from "../../atoms/basket";
+import { userState } from "../../atoms/user";
 import Cart from "../components/Cart";
+import Orders from "../components/Orders";
 import StoreBar from "../components/StoreBar";
 import PageNotFound from "./pageNotFound";
 
@@ -12,7 +21,18 @@ export default function Account() {
   const { userId, options } = useParams();
   const [userid, setUserid] = useState("");
   const [basketId, setBasketId] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
+  const user = useResetRecoilState(userState);
+  const basket = useResetRecoilState(basketState);
+  const totalCost = useResetRecoilState(basketCost);
+  const discountCost = useResetRecoilState(basketDiscountCost);
+  const handleLogout = async () => {
+    await axios.get(`${import.meta.env.VITE_BACKEND_URL}/logout`);
+    user(), basket(), totalCost(), discountCost();
+    navigate("/");
+  };
 
   axios.defaults.withCredentials = true;
   useEffect(() => {
@@ -46,8 +66,8 @@ export default function Account() {
     <div className="theme-font flex flex-col gap-2 w-full h-screen bg-zinc-900 theme-font text-white">
       <StoreBar />
       <div className="flex w-full flex-1 border-t border-t-zinc-600 overflow-hidden">
-        <div className="w-[250px] shrink-0 border-r border-zinc-600">
-          <ul className="flex flex-col">
+        <div className="w-[250px] flex flex-col shrink-0 border-r border-zinc-600">
+          <ul className="flex flex-col flex-1">
             <Link to={`/account/${userId.toLowerCase()}/cart`}>
               <li
                 className={`py-4 px-6 border-b border-zinc-600 hover:bg-blue-600 transition-all delay-60 ${
@@ -76,12 +96,18 @@ export default function Account() {
               </li>
             </Link>
           </ul>
+          <div
+            className="flex justify-between cursor-pointer text-gray-500 items-center py-4 px-6 bg-gray-800/50"
+            onClick={handleLogout}
+          >
+            Logout <FaExternalLinkAlt className="w-4 h-4" />
+          </div>
         </div>
         <div className="w-full overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-[#222]">
           {
             {
               cart: <Cart userId={userid} basketId={basketId} />,
-              orders: <div>Orders</div>,
+              orders: <Orders userId={userid} />,
               profile: <div>Profile</div>,
             }[options]
           }
