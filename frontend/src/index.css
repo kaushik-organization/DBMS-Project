@@ -1,205 +1,292 @@
-@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@500;600;700;800;900&family=Syne:wght@800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Exo+2:wght@500;600;700;800;900&family=Syne:wght@800&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 html {
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
 
 @layer components {
-    .gradient-black {
-        background: linear-gradient(180deg, transparent, #000);
-    }
-    .inblur {
-        box-shadow: 0 0 40px 10px white inset;
-    }
-    .theme-font {
-        font-family: 'Exo 2', sans-serif;
-    }
-    .bg-shadow:hover {
-        box-shadow: 0 0px 30px #fc9ef3;
-    }
+  .header-gradient-color {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 113, 57, 1) 0%,
+      rgba(214, 23, 146, 0.8463760504201681) 45%,
+      rgba(255, 56, 170, 0.9051995798319328) 65%,
+      rgba(255, 72, 72, 0.9808298319327731) 100%
+    );
+    filter: blur(140px);
+    background-repeat: no-repeat;
+    background-size: cover;
+    rotate: 180deg;
+  }
+  .gradient-black {
+    background: linear-gradient(180deg, transparent, #000);
+  }
+  .inblur {
+    box-shadow: 0 0 40px 10px white inset;
+  }
+  .theme-font {
+    font-family: "Exo 2", sans-serif;
+  }
+  .bg-shadow:hover {
+    box-shadow: 0 0px 30px #fc9ef3;
+  }
 
-    .back-shadow {
-        box-shadow: 0px 0px 50px #fc9ef3;
-    }
-    .input-group {
-        position: relative;
-    }
-    .input-field {
-        background-color: #000;
-        padding: 10px;
-        box-sizing: border-box;
-        outline: none;
-        border: 1px solid #5e5e5e;
-    }
-    .input-placeholder {
-        position: absolute;
-        top: 10px;
-        left: 8px;
-        font-size: 14px;
-        padding: 0px 5px;
-        color: #999;
-        transition: 0.3s;
-        pointer-events: none;
-    }
-    .input-field:focus + .input-placeholder, .input-field:not(:placeholder-shown) + .input-placeholder {
-        top: -10px;
-        color: #00b3ff;
-        background-color: #000;
-    }
-    .input-field:focus, .input-field:not(:placeholder-shown) {
-        border: 1px solid #00b3ff
-    }
+  .back-shadow {
+    box-shadow: 0px 0px 50px #fc9ef3;
+  }
+  .input-group {
+    position: relative;
+  }
+  .input-field {
+    background-color: #000;
+    padding: 10px;
+    box-sizing: border-box;
+    outline: none;
+    border: 1px solid #5e5e5e;
+  }
+  .input-placeholder {
+    position: absolute;
+    top: 10px;
+    left: 8px;
+    font-size: 14px;
+    padding: 0px 5px;
+    color: #999;
+    transition: 0.3s;
+    pointer-events: none;
+  }
+  .input-field:focus + .input-placeholder,
+  .input-field:not(:placeholder-shown) + .input-placeholder {
+    top: -10px;
+    color: #00b3ff;
+    background-color: #000;
+  }
+  .input-field:focus,
+  .input-field:not(:placeholder-shown) {
+    border: 1px solid #00b3ff;
+  }
 
-    .input-field2 {
-        background-color: #222;
-        padding: 10px;
-        box-sizing: border-box;
-        outline: none;
-        border: 1px solid #303030;
-    }
-    .input-placeholder2 {
-        position: absolute;
-        top: 10px;
-        left: 8px;
-        font-size: 14px;
-        padding: 0px 5px;
-        color: #999;
-        transition: 0.3s;
-        pointer-events: none;
-    }
-    .input-field2:focus + .input-placeholder2, .input-field2:not(:placeholder-shown) + .input-placeholder2 {
-        top: -10px;
-        color: #fff;
-        background-color: #222;
-    }
-    .input-field2:focus, .input-field2:not(:placeholder-shown) {
-        border: 1px solid #fff
-    }
+  .input-field2 {
+    background-color: #222;
+    padding: 10px;
+    box-sizing: border-box;
+    outline: none;
+    border: 1px solid #303030;
+  }
+  .input-placeholder2 {
+    position: absolute;
+    top: 10px;
+    left: 8px;
+    font-size: 14px;
+    padding: 0px 5px;
+    color: #999;
+    transition: 0.3s;
+    pointer-events: none;
+  }
+  .input-field2:focus + .input-placeholder2,
+  .input-field2:not(:placeholder-shown) + .input-placeholder2 {
+    top: -10px;
+    color: #fff;
+    background-color: #222;
+  }
+  .input-field2:focus,
+  .input-field2:not(:placeholder-shown) {
+    border: 1px solid #fff;
+  }
 
-    .input-field3 {
-        background-color: #222;
-        padding: 10px;
-        box-sizing: border-box;
-        outline: none;
-        border: 1px solid #303030;
-    }
-    .input-placeholder3 {
-        position: absolute;
-        top: 10px;
-        left: 8px;
-        font-size: 14px;
-        padding: 0px 5px;
-        color: #999;
-        transition: 0.3s;
-        pointer-events: none;
-    }
-    .input-field3:focus + .input-placeholder3, .input-field3:not(:placeholder-shown) + .input-placeholder3 {
-        top: -10px;
-        color: #999;
-        background-color: #222;
-    }
-    .input-field3:focus, .input-field3:not(:placeholder-shown) {
-        border: 1px solid #fff
-    }
+  .input-field3 {
+    background-color: #222;
+    padding: 10px;
+    box-sizing: border-box;
+    outline: none;
+    border: 1px solid #303030;
+  }
+  .input-placeholder3 {
+    position: absolute;
+    top: 10px;
+    left: 8px;
+    font-size: 14px;
+    padding: 0px 5px;
+    color: #999;
+    transition: 0.3s;
+    pointer-events: none;
+  }
+  .input-field3:focus + .input-placeholder3,
+  .input-field3:not(:placeholder-shown) + .input-placeholder3 {
+    top: -10px;
+    color: #999;
+    background-color: #222;
+  }
+  .input-field3:focus,
+  .input-field3:not(:placeholder-shown) {
+    border: 1px solid #fff;
+  }
 
-    .motion-animation {
-        animation: moveupdown 1s linear infinite;
-        animation-timing-function: ease;
-        position: absolute;
-        left: 0;
-        bottom: 0;
+  .motion-animation {
+    animation: moveupdown 1s linear infinite;
+    animation-timing-function: ease;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+  }
+  @keyframes moveupdown {
+    0%,
+    100% {
+      transform: translateY(0);
     }
-    @keyframes moveupdown {
-        0%, 100% {
-            transform: translateY(0);
-        }
-        50% {
-            transform: translateY(-10px);
-        }
+    50% {
+      transform: translateY(-10px);
     }
+  }
 
-    /* select */
-    .my-react-select-container .my-react-select__control {
-        @apply bg-white dark:bg-transparent border-none;
-      }
-    
-      .my-react-select-container .my-react-select__control--is-focused {
-        @apply border border-neutral-500 hover:border-neutral-500 dark:border-neutral-400 dark:hover:border-neutral-400 shadow-none;
-      }
-    
-      .my-react-select-container .my-react-select__menu {
-        @apply bg-neutral-100 dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600;
-      }
-    
-      .my-react-select-container .my-react-select__option {
-        @apply text-neutral-600 dark:text-neutral-200 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-800;
-      }
-      /* .my-react-select-container .my-react-select__option--is-focused {
+  /* select */
+  .my-react-select-container .my-react-select__control {
+    @apply bg-white dark:bg-transparent border-none;
+  }
+
+  .my-react-select-container .my-react-select__control--is-focused {
+    @apply border border-neutral-500 hover:border-neutral-500 dark:border-neutral-400 dark:hover:border-neutral-400 shadow-none;
+  }
+
+  .my-react-select-container .my-react-select__menu {
+    @apply bg-neutral-100 dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600;
+  }
+
+  .my-react-select-container .my-react-select__option {
+    @apply text-neutral-600 dark:text-neutral-200 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-800;
+  }
+  /* .my-react-select-container .my-react-select__option--is-focused {
         @apply bg-neutral-200 dark:bg-neutral-800;
       } */
-    
-      .my-react-select-container .my-react-select__indicator-separator {
-        @apply bg-neutral-400;
-      }
-    
-      .my-react-select-container .my-react-select__input-container,
-      .my-react-select-container .my-react-select__placeholder,
-      .my-react-select-container .my-react-select__single-value {
-        @apply text-neutral-600 dark:text-neutral-200;
-      }
 
-      .animated-box {
-        position: relative;
-      }
-      
-      .animated-box:after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(120deg, #ffcc00, #ec3dff, #f20000);
-        background-size: 300% 300%;
-        clip-path: polygon(0% 100%, 3px 100%, 2px 2px, calc(100% - 2px) 2px, calc(100% - 2px) calc(100% - 2px), 2px calc(100% - 2px), 2px 100%, 100% 100%, 100% 0%, 0% 0%);
-      }
-      
-      .animated-box.in:after {
-        animation: frame-enter 1s forwards ease-in-out reverse, gradient-animation 4s ease-in-out infinite;
-      }
-      
-      /* motion */
-      @keyframes gradient-animation {
-        0% {
-          background-position: 15% 0%;
-        }
-        50% {
-          background-position: 85% 100%;
-        }
-        100% {
-          background-position: 15% 0%;
-        }
-      }
-      
-      @keyframes frame-enter {
-        0% {
-          clip-path: polygon(0% 100%, 3px 100%, 3px 3px, calc(100% - 3px) 3px, calc(100% - 3px) calc(100% - 3px), 3px calc(100% - 3px), 3px 100%, 100% 100%, 100% 0%, 0% 0%);
-        }
-        25% {
-          clip-path: polygon(0% 100%, 3px 100%, 3px 3px, calc(100% - 3px) 3px, calc(100% - 3px) calc(100% - 3px), calc(100% - 3px) calc(100% - 3px), calc(100% - 3px) 100%, 100% 100%, 100% 0%, 0% 0%);
-        }
-        50% {
-          clip-path: polygon(0% 100%, 3px 100%, 3px 3px, calc(100% - 3px) 3px, calc(100% - 3px) 3px, calc(100% - 3px) 3px, calc(100% - 3px) 3px, calc(100% - 3px) 3px, 100% 0%, 0% 0%);
-        }
-        75% {
-          -webkit-clip-path: polygon(0% 100%, 3px 100%, 3px 3px, 3px 3px, 3px 3px, 3px 3px, 3px 3px, 3px 3px, 3px 0%, 0% 0%);
-        }
-        100% {
-          -webkit-clip-path: polygon(0% 100%, 3px 100%, 3px 100%, 3px 100%, 3px 100%, 3px 100%, 3px 100%, 3px 100%, 3px 100%, 0% 100%);
-        }
-      }
-    /* select */
+  .my-react-select-container .my-react-select__indicator-separator {
+    @apply bg-neutral-400;
+  }
+
+  .my-react-select-container .my-react-select__input-container,
+  .my-react-select-container .my-react-select__placeholder,
+  .my-react-select-container .my-react-select__single-value {
+    @apply text-neutral-600 dark:text-neutral-200;
+  }
+
+  .animated-box {
+    position: relative;
+  }
+
+  .animated-box:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(120deg, #ffcc00, #ec3dff, #f20000);
+    background-size: 300% 300%;
+    clip-path: polygon(
+      0% 100%,
+      3px 100%,
+      2px 2px,
+      calc(100% - 2px) 2px,
+      calc(100% - 2px) calc(100% - 2px),
+      2px calc(100% - 2px),
+      2px 100%,
+      100% 100%,
+      100% 0%,
+      0% 0%
+    );
+  }
+
+  .animated-box.in:after {
+    animation: frame-enter 1s forwards ease-in-out reverse,
+      gradient-animation 4s ease-in-out infinite;
+  }
+
+  /* motion */
+  @keyframes gradient-animation {
+    0% {
+      background-position: 15% 0%;
+    }
+    50% {
+      background-position: 85% 100%;
+    }
+    100% {
+      background-position: 15% 0%;
+    }
+  }
+
+  @keyframes frame-enter {
+    0% {
+      clip-path: polygon(
+        0% 100%,
+        3px 100%,
+        3px 3px,
+        calc(100% - 3px) 3px,
+        calc(100% - 3px) calc(100% - 3px),
+        3px calc(100% - 3px),
+        3px 100%,
+        100% 100%,
+        100% 0%,
+        0% 0%
+      );
+    }
+    25% {
+      clip-path: polygon(
+        0% 100%,
+        3px 100%,
+        3px 3px,
+        calc(100% - 3px) 3px,
+        calc(100% - 3px) calc(100% - 3px),
+        calc(100% - 3px) calc(100% - 3px),
+        calc(100% - 3px) 100%,
+        100% 100%,
+        100% 0%,
+        0% 0%
+      );
+    }
+    50% {
+      clip-path: polygon(
+        0% 100%,
+        3px 100%,
+        3px 3px,
+        calc(100% - 3px) 3px,
+        calc(100% - 3px) 3px,
+        calc(100% - 3px) 3px,
+        calc(100% - 3px) 3px,
+        calc(100% - 3px) 3px,
+        100% 0%,
+        0% 0%
+      );
+    }
+    75% {
+      -webkit-clip-path: polygon(
+        0% 100%,
+        3px 100%,
+        3px 3px,
+        3px 3px,
+        3px 3px,
+        3px 3px,
+        3px 3px,
+        3px 3px,
+        3px 0%,
+        0% 0%
+      );
+    }
+    100% {
+      -webkit-clip-path: polygon(
+        0% 100%,
+        3px 100%,
+        3px 100%,
+        3px 100%,
+        3px 100%,
+        3px 100%,
+        3px 100%,
+        3px 100%,
+        3px 100%,
+        0% 100%
+      );
+    }
+  }
+  /* select */
 }
