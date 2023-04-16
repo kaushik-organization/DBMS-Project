@@ -92,7 +92,7 @@ export default function StoreBar({ setBooks }) {
           className="w-40 invert mix-blend-luminosity"
         />
       </Link>
-      <div className="flex-1 flex mx-20 items-center">
+      <div className="z-10 flex-1 flex mx-20 items-center">
         <form className="flex w-full" onSubmit={handleSubmit}>
           <input
             type={"text"}
@@ -106,7 +106,7 @@ export default function StoreBar({ setBooks }) {
           </button>
         </form>
       </div>
-      <div className="flex items-center gap-3">
+      <div className="z-10 flex items-center gap-3">
         {user?.auth ? (
           <>
             <p className="text-center leading-3">
