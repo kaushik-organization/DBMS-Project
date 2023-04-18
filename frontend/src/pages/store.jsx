@@ -278,8 +278,8 @@ export default function Store() {
             </section>
           </div>
           <div className="flex-1 overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-[#222] p-4 flex flex-wrap gap-6">
-            {books.length !== 0 ? (
-              [...books].map((item, index) => (
+            {books && books.length !== 0 ? (
+              books.map((item, index) => (
                 <Link
                   key={index}
                   to={`/book/${item.book_id}`}
