@@ -47,6 +47,7 @@ app.use("/",require("./routes/getReviewsUserId"))
 
 app.use("/", require("./routes/allfilters"));
 app.use("/", require("./routes/clearBasketByUserId"));
+app.use("/" , require("./routes/updateUserInfo"));
 
 
 app.listen(process.env.PORT, () => {
