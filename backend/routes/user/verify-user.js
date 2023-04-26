@@ -32,7 +32,7 @@ router.get("/verify-user", verifyUser, (req, res) => {
 });
 
 router.get("/logout", (req, res) => {
-  res.clearCookie("token");
+  res.clearCookie("token", { sameSite: "none", secure: "true" });
   return res.json({ Status: "success" });
 });
 
