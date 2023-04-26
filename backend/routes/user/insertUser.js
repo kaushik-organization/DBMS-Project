@@ -81,7 +81,7 @@ router.post("/login", async (req, res) => {
             expiresIn: "1d",
           }
         );
-        res.cookie("token", token);
+        res.cookie("token", token, { sameSite: "none" });
         return res.status(200).json({ Status: "success" });
       } else {
         database.connectionEnd(conn);
