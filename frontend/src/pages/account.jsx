@@ -14,6 +14,7 @@ import {
 import { userState } from "../../atoms/user";
 import Cart from "../components/Cart";
 import Orders from "../components/Orders";
+import Profile from "../components/Profile";
 import StoreBar from "../components/StoreBar";
 import PageNotFound from "./pageNotFound";
 
@@ -121,7 +122,7 @@ export default function Account() {
             {
               cart: <Cart userId={userid} basketId={basketId} />,
               orders: <Orders userId={userid} />,
-              profile: <div>Profile</div>,
+              profile: <Profile userId={userid} />,
             }[options]
           }
         </div>

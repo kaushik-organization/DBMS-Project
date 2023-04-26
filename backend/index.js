@@ -36,19 +36,19 @@ app.use("/", require("./routes/ratingInRange"));
 app.use("/", require("./routes/searchBookName"));
 app.use("/", require("./routes/books/fetchBookId"));
 app.use("/", require("./routes/books/getBooksId"));
-app.use("/" , require('./routes/orderHistory'))
-app.use("/" , require('./routes/addReviews'));
-app.use("/purchaseBasket" , require("./routes/purchaseBasket"))
-app.use("/",require("./routes/sortwithDiscount"));
+app.use("/", require("./routes/orderHistory"));
+app.use("/", require("./routes/addReviews"));
+app.use("/purchaseBasket", require("./routes/purchaseBasket"));
+app.use("/", require("./routes/sortwithDiscount"));
 
-app.use("/",require("./routes/clearBasketByUserId"));
-app.use("/",require("./routes/getReviewsBookId"))
-app.use("/",require("./routes/getReviewsUserId"))
+app.use("/", require("./routes/clearBasketByUserId"));
+app.use("/", require("./routes/getReviewsBookId"));
+app.use("/", require("./routes/getReviewsUserId"));
 
 app.use("/", require("./routes/allfilters"));
 app.use("/", require("./routes/clearBasketByUserId"));
-app.use("/" , require("./routes/updateUserInfo"));
-
+app.use("/", require("./routes/updateUserInfo"));
+app.use("/", require("./routes/getUserById"));
 
 app.listen(process.env.PORT, () => {
   console.log("Conected successfully to ", process.env.PORT);
