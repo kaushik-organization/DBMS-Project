@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
-import { useResetRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState } from "recoil";
 import {
   basketCost,
   basketDiscountCost,
@@ -14,6 +14,7 @@ import {
 import { userState } from "../../atoms/user";
 import Cart from "../components/Cart";
 import Orders from "../components/Orders";
+import Profile from "../components/Profile";
 import StoreBar from "../components/StoreBar";
 import PageNotFound from "./pageNotFound";
 
@@ -22,6 +23,8 @@ export default function Account() {
   const [userid, setUserid] = useState("");
   const [basketId, setBasketId] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const [useruser, setUserUser] = useRecoilState(userState);
 
   const navigate = useNavigate();
   const user = useResetRecoilState(userState);
@@ -36,13 +39,24 @@ export default function Account() {
 
   axios.defaults.withCredentials = true;
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_BACKEND_URL}/verify-user`).then((res) => {
-      if (res.data.Status === "success") {
-        setUserid(res.data.user_id);
-        setBasketId(res.data.basket_id);
-        setLoading(false);
-      }
-    });
+    setLoading(true);
+    axios
+      .get(`${import.meta.env.VITE_BACKEND_URL}/verify-user`)
+      .then((res) => {
+        if (res.data.Status === "success") {
+          const data = {
+            user_id: res.data.user_id,
+            name: res.data.name,
+            profile_pic: res.data.profile_pic,
+            basket_id: res.data.basket_id,
+            auth: true,
+          };
+          setUserUser(data);
+          setUserid(res.data.user_id);
+          setBasketId(res.data.basket_id);
+        }
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   if (!["cart", "orders", "profile"].includes(options)) {
@@ -108,7 +122,7 @@ export default function Account() {
             {
               cart: <Cart userId={userid} basketId={basketId} />,
               orders: <Orders userId={userid} />,
-              profile: <div>Profile</div>,
+              profile: <Profile userId={userid} />,
             }[options]
           }
         </div>

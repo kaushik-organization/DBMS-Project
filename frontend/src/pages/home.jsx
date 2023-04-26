@@ -90,7 +90,7 @@ export default function Home() {
               className="brightness-200"
             />
           </div>
-          <ul className="flex gap-6 text-black/80 items-center">
+          {/* <ul className="flex gap-6 text-black/80 items-center">
             <li>
               <AiFillAppstore className="w-8 h-8" />
             </li>
@@ -101,7 +101,7 @@ export default function Home() {
             <li>
               <AiOutlineTwitter className="w-8 h-8" />
             </li>
-          </ul>
+          </ul> */}
           <div className="flex items-center gap-3">
             {user?.auth ? (
               <>
@@ -149,9 +149,12 @@ export default function Home() {
               <span className="text-fuchsia-600">A place</span> where <br />
               world unite to collide
             </p>
-            <button className="bg-fuchsia-600 px-20 p-4 text-white flex items-center gap-3 flex-row-reverse text-semibold text-2xl font-semibold w-fit rounded-sm">
+            <Link
+              to={"/store"}
+              className="bg-fuchsia-600 px-16 p-3 text-white flex items-center gap-3 flex-row-reverse text-semibold text-2xl font-semibold w-fit rounded-sm"
+            >
               Check out the store <FaStore className="w-6 h-6" />
-            </button>
+            </Link>
           </div>
           <div className="w-1/2 h-full">
             <img
